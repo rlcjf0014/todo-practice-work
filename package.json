@@ -1,5 +1,5 @@
 {
-  "name": "todopracticework",
+  "name": "todo-practice-work",
   "version": "1.0.0",
   "description": "Practice typescript-rest through a simple ToDo application",
   "main": "index.js",
@@ -10,11 +10,13 @@
     "type": "git",
     "url": "git+https://github.com/rlcjf0014/todo-practice-work.git"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/rlcjf0014/todo-practice-work/issues"
   },
-  "homepage": "https://github.com/rlcjf0014/todo-practice-work#readme"
+  "homepage": "https://github.com/rlcjf0014/todo-practice-work#readme",
+  "dependencies": {
+    "typescript-rest": "^3.0.1"
+  }
 }
