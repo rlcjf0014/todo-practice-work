@@ -7,6 +7,6 @@ export const sequelize = new Sequelize({
   database: 'todo',
   storage: ':memory:',
   username: "root",
-  password: "rlcjf0014",
+  password:
   models: [__dirname + '../models']
 });
