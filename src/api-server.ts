@@ -2,7 +2,6 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as http from 'http';
 import * as morgan from 'morgan';
-import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import * as path from 'path';
 import { PassportAuthenticator, Server } from 'typescript-rest';
 
