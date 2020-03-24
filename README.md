@@ -58,12 +58,9 @@ Response (200) : {
 
 ## Logout
 
-**PUT** /user/token
+**DELETE** /user/:userid
 - This endpoint deletes the user's refresh token. 
 
-Body: {
-    id: 1
-}
 
 Response (200): {
     message: "Successfully deleted refresh token."
