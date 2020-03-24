@@ -3,7 +3,7 @@ import * as express from 'express';
 import * as http from 'http';
 import * as morgan from 'morgan';
 import * as path from 'path';
-import { PassportAuthenticator, Server } from 'typescript-rest';
+import { Server } from 'typescript-rest';
 
 export class ApiServer {
     public PORT: number = 3000;
@@ -63,21 +63,8 @@ export class ApiServer {
     }
 
     private configureAuthenticator() {
-        const JWT_SECRET: string = 'some-jwt-secret';
-        const jwtConfig: StrategyOptions = {
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: Buffer.from(JWT_SECRET)
-        };
-        const strategy = new Strategy(jwtConfig, (payload: any, done: (err: any, user: any) => void) => {
-            done(null, payload);
-        });
-        const authenticator = new PassportAuthenticator(strategy, {
-            deserializeUser: (user: string) => JSON.parse(user),
-            serializeUser: (user: any) => {
-                return JSON.stringify(user);
-            }
-        });
-        Server.registerAuthenticator(authenticator);
-        Server.registerAuthenticator(authenticator, 'secondAuthenticator');
+
+        
+       
     }
 }
