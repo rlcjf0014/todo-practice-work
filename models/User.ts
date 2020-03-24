@@ -1,5 +1,5 @@
 import {Model, Column, Table, HasMany, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement} from "sequelize-typescript";
-import {Todo} from "./todo";
+import {Todo} from "./Todo";
 
 @Table
 export class User extends Model<User> {
@@ -23,14 +23,17 @@ export class User extends Model<User> {
 
     @Column
     refreshToken?: string;
+    
+    @HasMany(() => Todo)
+    todos: Todo[];
 
     @CreatedAt
+    @Column
     creationDate: Date;
 
     @UpdatedAt
+    @Column
     updatedOn: Date;
 
-    @HasMany(() => Todo)
-    todos: Todo[];
 
 }

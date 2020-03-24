@@ -1,4 +1,4 @@
-import {POST, PathParam, Path, DELETE} from "typescript-rest";
+import {POST, PathParam, Path, DELETE, Errors} from "typescript-rest";
 import {createuser, checkuser, deletetoken} from "../service/user";
 import {signup, login} from "../types/interface";
 import {Inject} from "typescript-ioc";
@@ -17,7 +17,7 @@ export class UserController {
           return "Signup is successful";
       }
       else {
-          return "Signup has failed";
+          throw new Errors.ConflictError("Signup has failed");
       }
     }
 
@@ -31,9 +31,8 @@ export class UserController {
             return "Login is successful";
         }
         else {
-            return "Login has failed";
+            throw new Errors.NotFoundError("Login has failed");
         }
-
     }
 
     @Inject
@@ -47,12 +46,9 @@ export class UserController {
             return "Refresh token is successfully deleted";
         }
         else {
-            return "Refresh token deletion has failed";
+            throw new Errors.ConflictError("Token deletion has failed");
         }
-
     }
-
-
 
 }
 

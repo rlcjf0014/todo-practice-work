@@ -59,12 +59,12 @@ export class ApiServer {
         this.app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
         this.app.use(cors());
         this.app.use(morgan('combined'));
-        this.configureAuthenticator();
+        // this.configureAuthenticator();
     }
 
-    private configureAuthenticator() {
+    // private configureAuthenticator() {
 
-        
+
        
-    }
+    // }
 }
