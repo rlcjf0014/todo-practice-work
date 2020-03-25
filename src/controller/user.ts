@@ -1,5 +1,6 @@
-import {POST, PathParam, Path, DELETE, Errors, GET} from "typescript-rest";
+import {POST, PathParam, HeaderParam, Path, DELETE, Errors, GET} from "typescript-rest";
 import {checkuser, deletetoken, renewAccess} from "../service/user";
+import {token} from "../service/token";
 import {login} from "../types/interface";
 import {Inject} from "typescript-ioc";
 require("dotenv").config();
@@ -10,7 +11,9 @@ export class UserController {
     
     @Inject
     private checkService: checkuser;
+    @Inject
     private deleteService: deletetoken;
+    @Inject
     private renewService: renewAccess;
 
     @POST
@@ -23,24 +26,36 @@ export class UserController {
             throw new Errors.NotFoundError("Login has failed");
         }
     }
-
+    
+    @Inject
+    private tokenService: token;
     @Path(":userid")
     @DELETE
-    public async logout(@PathParam("userid") userid: number): Promise<string> {
-        const result:boolean = await this.deleteService.deletetoken(userid);
-        if (result === true){
-            return "Refresh token is successfully deleted";
+    public async logout(@PathParam("userid") userid: number, @HeaderParam("authentication") authentication:string): Promise<string> {
+        const check:boolean = await this.tokenService.checkAccessToken(authentication);
+        if (check === true){
+            const result:boolean = await this.deleteService.deletetoken(userid);
+            if (result === true){
+                return "Refresh token is successfully deleted";
+            }
+            else {
+                throw new Errors.ConflictError("Token deletion has failed");
+            }
         }
         else {
-            throw new Errors.ConflictError("Token deletion has failed");
+            //! 에러처리 필요
+            throw new Errors.ForbiddenError("Access Token has expired");
         }
     }
+
 
     @Path(":userid")
     @GET
     public async renewToken(@PathParam("userid") userid: number): Promise<string>{
         const result:string | boolean = await this.renewService.renewToken(userid);
-        if (result){
+        console.log("결과값", result);
+        console.log("유저아이디", userid)
+        if (typeof result === 'string'){
             return result;
         }
         else {

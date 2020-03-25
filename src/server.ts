@@ -5,7 +5,7 @@ import {ApiServer} from './api-server';
 
 
 export const start = async():Promise<void> => {
-  const db = await sequelize.sync({force: true});
+  const db = await sequelize.sync({force: false});
   const apiServer = new ApiServer();
   if (db) {
     console.log("Database is now connected!");
