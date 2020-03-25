@@ -29,7 +29,7 @@ https://www.erdcloud.com/d/5eLdfPncoeKkJkqK7
 
 ## Sign Up
 
-**POST** /user/new
+**POST** /new
 - This endpoint allows the user to sign up. 
 
 Body: {
