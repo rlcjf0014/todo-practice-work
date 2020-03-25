@@ -23,10 +23,5 @@ export interface updatetodo {
     complete:  TodoStatus
 }
 
-export interface gettodo {
-    id: number,
-    content: string,
-    complete: TodoStatus.Active
-}
 
 
