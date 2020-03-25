@@ -1,45 +1,31 @@
-import {POST, PathParam, Path, DELETE, Errors} from "typescript-rest";
-import {createuser, checkuser, deletetoken} from "../service/user";
-import {signup, login} from "../types/interface";
+import {POST, PathParam, Path, DELETE, Errors, GET} from "typescript-rest";
+import {checkuser, deletetoken, renewAccess} from "../service/user";
+import {login} from "../types/interface";
 import {Inject} from "typescript-ioc";
+require("dotenv").config();
+
 
 @Path("/user")
 export class UserController {
-
-    @Inject
-    private createService: createuser;
-
-    @Path("/new")
-    @POST
-    public async signup(newinfo:signup): Promise<string> {
-      const result:boolean = await this.createService.createuser(newinfo);
-      if (result === true){
-          return "Signup is successful";
-      }
-      else {
-          throw new Errors.ConflictError("Signup has failed");
-      }
-    }
-
+    
     @Inject
     private checkService: checkuser;
+    private deleteService: deletetoken;
+    private renewService: renewAccess;
 
     @POST
     public async login(userinfo:login): Promise<string> {
-        const result:boolean = await this.checkService.checkuser(userinfo);
-        if (result === true){
-            return "Login is successful";
+        const result:boolean | string = await this.checkService.checkuser(userinfo);
+        if (typeof result === 'string'){
+            return result;
         }
         else {
             throw new Errors.NotFoundError("Login has failed");
         }
     }
 
-    @Inject
-    private deleteService: deletetoken;
-
-    @DELETE
     @Path(":userid")
+    @DELETE
     public async logout(@PathParam("userid") userid: number): Promise<string> {
         const result:boolean = await this.deleteService.deletetoken(userid);
         if (result === true){
@@ -49,6 +35,19 @@ export class UserController {
             throw new Errors.ConflictError("Token deletion has failed");
         }
     }
+
+    @Path(":userid")
+    @GET
+    public async renewToken(@PathParam("userid") userid: number): Promise<string>{
+        const result:string | boolean = await this.renewService.renewToken(userid);
+        if (result){
+            return result;
+        }
+        else {
+            throw new Errors.UnauthorizedError("Please Login Again");
+        }
+    }
+
 
 }
 

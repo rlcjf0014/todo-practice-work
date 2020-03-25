@@ -16,10 +16,11 @@
       "skipLibCheck": true,
       "sourceMap": false,
       "strictNullChecks": false,
+      "allowSyntheticDefaultImports": true,
       "target": "es2016"
     },
     "include": [
-      "src/**/*.ts", "index.ts"
+      "fail/**/*.ts", "index.ts", "lib/api-server.ts"
     ]
   }
   
