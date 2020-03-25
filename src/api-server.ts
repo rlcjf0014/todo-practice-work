@@ -2,9 +2,10 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as http from 'http';
 import * as morgan from 'morgan';
-import * as path from 'path';
-import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
-import { Server, PassportAuthenticator } from 'typescript-rest';
+// import * as jwt from 'jsonwebtoken';
+import { Server} from 'typescript-rest';
+// import {UserController, NewController} from "./controller";
+import path = require('path');
 require("dotenv").config();
 
 export class ApiServer {
@@ -12,12 +13,14 @@ export class ApiServer {
 
     private readonly app: express.Application;
     private server: http.Server = null;
+    handleError: any;
 
     constructor() {
         this.app = express();
         this.config();
 
         Server.loadServices(this.app, 'controller/*', __dirname);
+
     }
 
     /**
@@ -61,25 +64,25 @@ export class ApiServer {
         this.app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
         this.app.use(cors());
         this.app.use(morgan('combined'));
-        this.configureAuthenticator();
+        // this.configureAuthenticator();
     }
 
-    private configureAuthenticator() {
-        const JWT_SECRET: string = process.env.JWT_SECRET_ACCESS;
-        const jwtConfig: StrategyOptions = {
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: Buffer.from(JWT_SECRET)
-        };
-        const strategy = new Strategy(jwtConfig, (payload: any, done: (err: any, user: any) => void) => {
-            done(null, payload);
-        });
-        const authenticator = new PassportAuthenticator(strategy, {
-            deserializeUser: (user: string) => JSON.parse(user),
-            serializeUser: (user: any) => {
-                return JSON.stringify(user);
-            }
-        });
-        Server.registerAuthenticator(authenticator);
-        Server.registerAuthenticator(authenticator, 'secondAuthenticator');
-    }
+    // private configureAuthenticator() {
+    //     const JWT_SECRET: string = process.env.JWT_SECRET_ACCESS;
+    //     const jwtConfig: StrategyOptions = {
+    //         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    //         secretOrKey: Buffer.from(JWT_SECRET)
+    //     };
+    //     const strategy = new Strategy(jwtConfig, (payload: any, done: (err: any, user: any) => void) => {
+    //         done(null, payload);
+    //     });
+    //     const authenticator = new PassportAuthenticator(strategy, {
+    //         deserializeUser: (user: string) => JSON.parse(user),
+    //         serializeUser: (user: any) => {
+    //             return JSON.stringify(user);
+    //         }
+    //     });
+    //     Server.registerAuthenticator(authenticator);
+    //     Server.registerAuthenticator(authenticator, 'secondAuthenticator');
+    // }
 }

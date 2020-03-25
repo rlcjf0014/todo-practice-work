@@ -4,7 +4,7 @@ import {signup} from "../types/interface";
 import {Inject} from "typescript-ioc";
 
 @Path("/new")
-export class UserController {
+export class NewController {
 
     @Inject
     private createService: createuser;

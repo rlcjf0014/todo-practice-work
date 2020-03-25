@@ -47,5 +47,15 @@ export class token {
         }
 
     }
+
+    public checkAccessToken(accessToken:string):boolean {
+        try{
+            jwt.verify(accessToken, this.accessKey);
+            return true;
+        }
+        catch(e) {
+            return false;
+        }
+    }
     
 }
