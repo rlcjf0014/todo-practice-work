@@ -129,7 +129,7 @@ Response (200): [
 
 ## Renew Access Token
 
-**GET** /user/:userid/token
+**GET** /user/:userid
 - This endpoint gives the user new access token based on the refresh token.
 
 Response (200): {

@@ -36,5 +36,16 @@ export class token {
             user.creationDate,
         }, this.accessKey, { expiresIn: "1d" })
     }
+
+    public checkRefreshToken(refreshToken:string):boolean {
+        try{
+            jwt.verify(refreshToken, this.refreshKey);
+            return true;
+        }
+        catch (e) {
+            return false;
+        }
+
+    }
     
 }

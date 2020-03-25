@@ -85,5 +85,27 @@ export class deletetoken {
 
 }
 
+export class renewAccess {
+    @Inject
+    private tokenService:token;
+
+    public async renewToken (userid: number): Promise<string | false>{
+        return await User.findOne({where: {userid}})
+        .then(async res => {
+            const result:boolean = await this.tokenService.checkRefreshToken(res.refreshToken);
+            if (result === true){
+                const newAccessToken:string = await this.tokenService.generateAccessToken(res);
+                return newAccessToken;
+            }
+            else {
+                return false;
+            }
+        })
+    }
+
+
+
+}
+
 
 

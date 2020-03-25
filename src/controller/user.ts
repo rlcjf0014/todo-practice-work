@@ -1,5 +1,5 @@
-import {POST, PathParam, Path, DELETE, Errors} from "typescript-rest";
-import {checkuser, deletetoken} from "../service/user";
+import {POST, PathParam, Path, DELETE, Errors, GET} from "typescript-rest";
+import {checkuser, deletetoken, renewAccess} from "../service/user";
 import {login} from "../types/interface";
 import {Inject} from "typescript-ioc";
 require("dotenv").config();
@@ -11,6 +11,7 @@ export class UserController {
     @Inject
     private checkService: checkuser;
     private deleteService: deletetoken;
+    private renewService: renewAccess;
 
     @POST
     public async login(userinfo:login): Promise<string> {
@@ -23,8 +24,8 @@ export class UserController {
         }
     }
 
-    @DELETE
     @Path(":userid")
+    @DELETE
     public async logout(@PathParam("userid") userid: number): Promise<string> {
         const result:boolean = await this.deleteService.deletetoken(userid);
         if (result === true){
@@ -34,6 +35,19 @@ export class UserController {
             throw new Errors.ConflictError("Token deletion has failed");
         }
     }
+
+    @Path(":userid")
+    @GET
+    public async renewToken(@PathParam("userid") userid: number): Promise<string>{
+        const result:string | boolean = await this.renewService.renewToken(userid);
+        if (result){
+            return result;
+        }
+        else {
+            throw new Errors.UnauthorizedError("Please Login Again");
+        }
+    }
+
 
 }
 
