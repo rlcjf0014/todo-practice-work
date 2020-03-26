@@ -18,7 +18,7 @@ export class ApiServer {
         this.config();
 
         Server.loadServices(this.app, 'controller/*', __dirname);
-
+        Server.swagger(this.app, { filePath: './dist/swagger.json' });
     }
 
     /**

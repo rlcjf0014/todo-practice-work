@@ -20,7 +20,7 @@
       "target": "es2016"
     },
     "include": [
-      "fail/**/*.ts", "index.ts", "lib/api-server.ts"
+      "src/**/*.ts", "index.ts"
     ]
   }
   

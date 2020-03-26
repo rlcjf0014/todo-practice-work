@@ -1,4 +1,4 @@
-import {TodoStatus} from "./enum";
+import { TodoStatus } from './enum';
 
 
 export interface signup {
@@ -20,8 +20,5 @@ export interface addtodo{
 
 export interface updatetodo {
     id: number,
-    complete:  TodoStatus
+    complete: TodoStatus
 }
-
-
-

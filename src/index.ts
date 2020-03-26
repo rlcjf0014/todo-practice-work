@@ -1,4 +1,4 @@
-import {start} from './src/server';
+import {start} from './server';
 
 start()
     .catch((err) => {

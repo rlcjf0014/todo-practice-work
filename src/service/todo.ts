@@ -1,62 +1,50 @@
-import {Todo} from "../models/Todo";
-import {addtodo, updatetodo} from "../types/interface";
-import { Errors } from "typescript-rest";
+import { Errors } from 'typescript-rest';
+import { Todo, TodoModel } from '../models/Todo';
+import { addtodo, updatetodo } from '../types/interface';
 
 
 export class todo {
-   
-    public async addService (newinfo:addtodo, userId:number):Promise<boolean> {
-      return await Todo.create({content: newinfo.content, date:newinfo.date, userId, complete:newinfo.complete})
-        .then(res => {
-                return true;
-        })
-        .catch(error => {
-            throw new Errors.ConflictError(error) 
-        })
-    }
+  public async addService(newinfo:addtodo, userId:number):Promise<TodoModel> {
+    return await Todo.create({
+      content: newinfo.content, date: newinfo.date, userId, complete: newinfo.complete,
+    })
+      .then((res) => res)
+      .catch((error) => {
+        throw new Errors.InternalServerError(error);
+      });
+  }
 
-    public async updateService (updateinfo:updatetodo):Promise<boolean> {
-        const result:Todo|void = await Todo.findOne({where: {id: updateinfo.id}})
-          .then(todo => {
-              if (todo.complete === "Y"){
-                  todo.complete = "C";
-                  return todo.save();
-              }
-              else {
-                  todo.complete = "Y";
-                  return todo.save();
-              }
-          }).catch(error => {
-              //! 에러처리
-              throw new Errors.ConflictError(error)
-          })
-        if (result){
-            return true;
-        }
-        else {
-            return false;
-        }   
-    }
+  public async updateService(updateinfo:updatetodo, userId:number):Promise<TodoModel> {
+    return await Todo.findOne({ where: { id: updateinfo.id, userId } })
+      .then((todo) => {
+          todo.complete = updateinfo.complete;
+          return todo.save();
+      }).catch((error) => {
+        //! 에러처리
+        throw new Errors.NotFoundError(error);
+      });
+  }
 
-    public async getService (userId:number, date:string):Promise<Array<Todo>> {
-        return await Todo.findAll({where: {userId, date}})
-          .then(res => {
-              return res;
-          })
-          .catch(error => {
-            throw new Errors.ConflictError(error)
-          })
-    }
+  public async getService(userId:number, date:string):Promise<Array<TodoModel>> {
+    return await Todo.findAll({ where: { userId, date } })
+      .then((res) => res)
+      .catch((error) => {
+        throw new Errors.NotFoundError(error);
+      });
+  }
 
-    public async deleteService (todoid:number):Promise<boolean> {
-        return await Todo.destroy({where: {id: todoid}})
-            .then(() => {
-                return true;
-            })
-            .catch((error) => {
-                throw new Errors.ConflictError(error)
-            })
-    }
-
-
+  public async deleteService(todoid:number, userId:number):Promise<string> {
+    return await Todo.destroy({ where: { id: todoid, userId } })
+      .then((res) => {
+      if (res === 1){
+        return 'Successfully deleted todo';
+      }
+      else {
+        throw new Errors.ConflictError('No todo with that id');
+      }
+      })
+      .catch((error) => {
+        throw new Errors.ConflictError(error);
+      });
+  }
 }
