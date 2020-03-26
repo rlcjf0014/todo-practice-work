@@ -9,13 +9,13 @@ export class User extends Model<User> {
     @Column
     userid: number;
 
-    @Column
+    @Column({allowNull: false})
     email: string;
 
-    @Column
+    @Column({allowNull: false})
     password: string;
 
-    @Column
+    @Column({allowNull: false})
     nickname: string;
 
     @Column

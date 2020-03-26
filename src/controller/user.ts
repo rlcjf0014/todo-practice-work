@@ -53,8 +53,6 @@ export class UserController {
     @GET
     public async renewToken(@PathParam("userid") userid: number): Promise<string>{
         const result:string | boolean = await this.renewService.renewToken(userid);
-        console.log("결과값", result);
-        console.log("유저아이디", userid)
         if (typeof result === 'string'){
             return result;
         }

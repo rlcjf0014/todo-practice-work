@@ -41,7 +41,6 @@ export class checkuser {
         return await User
         .findOne({where:{email: userinfo.email}})
         .then(async (res) => {
-            console.log(res);
             if (res){
                 const secretpw:string = await this.pwService.getEncryPw(userinfo.password, res.salt);
                 if(secretpw === res.password) {

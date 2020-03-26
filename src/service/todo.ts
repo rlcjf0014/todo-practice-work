@@ -5,8 +5,8 @@ import { Errors } from "typescript-rest";
 
 export class todo {
    
-    public async addService (newinfo:addtodo):Promise<boolean> {
-      return await Todo.create({content: newinfo.content, date:newinfo.date, userId:newinfo.userid})
+    public async addService (newinfo:addtodo, userId:number):Promise<boolean> {
+      return await Todo.create({content: newinfo.content, date:newinfo.date, userId, complete:newinfo.complete})
         .then(res => {
                 return true;
         })
