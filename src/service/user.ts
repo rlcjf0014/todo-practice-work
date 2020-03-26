@@ -3,6 +3,7 @@ import {signup, login} from "../types/interface";
 import {createSalt} from "./crypto";
 import {token} from "./token"
 import { Inject } from "typescript-ioc";
+import { Errors } from "typescript-rest";
 
 export class createuser {
     @Inject
@@ -28,6 +29,9 @@ export class createuser {
                   return false;
               }
           })
+          .catch(error => {
+            throw new Errors.InternalServerError(error);
+        })
       }
 };
 
@@ -65,6 +69,9 @@ export class checkuser {
                 return false;
             }
         })
+        .catch(error => {
+            throw new Errors.InternalServerError(error);
+        })
     }
 }
 
@@ -81,6 +88,9 @@ export class deletetoken {
             else {
                 return false;
             }
+        })
+        .catch(error => {
+            throw new Errors.InternalServerError(error);
         })
     }
 
@@ -101,6 +111,9 @@ export class renewAccess {
             else {
                 return false;
             }
+        })
+        .catch(error => {
+            throw new Errors.InternalServerError(error);
         })
     }
 

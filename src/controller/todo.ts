@@ -14,18 +14,12 @@ export class TodoController {
     private tokenService:token;
 
     @POST
-    public async addTodo(newinfo:addtodo, @HeaderParam("authentication") authentication:string): Promise<string> {
+    public async addTodo(newinfo:addtodo, @HeaderParam("authentication") authentication:string): Promise<string|Todo> {
         const check:boolean = await this.tokenService.checkAccessToken(authentication);
         if (check === true) {
            const userId:number = await this.tokenService.getUserIdbyAccessToken(authentication);
-           const result:boolean = await this.todoService.addService(newinfo, userId);
-           if (result){
-               return "Successfully added a new todo";
-           }
-           else {
-               //!에러처리
-               return "Failed to add a new todo";
-           }  
+           const result:Todo = await this.todoService.addService(newinfo, userId);
+           return result;
         }
         else {
             throw new Errors.UnauthorizedError("Access Token has expired");
@@ -44,7 +38,7 @@ export class TodoController {
            }   
            else {
             //!에러처리
-            return "Failed to update todo";
+            throw new Errors.ConflictError("Todo not found");
         }  
         }
         else {

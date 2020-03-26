@@ -3,15 +3,16 @@ import {addtodo, updatetodo} from "../types/interface";
 import { Errors } from "typescript-rest";
 
 
+
 export class todo {
    
-    public async addService (newinfo:addtodo, userId:number):Promise<boolean> {
+    public async addService (newinfo:addtodo, userId:number):Promise<Todo> {
       return await Todo.create({content: newinfo.content, date:newinfo.date, userId, complete:newinfo.complete})
         .then(res => {
-                return true;
+                return res;
         })
         .catch(error => {
-            throw new Errors.ConflictError(error) 
+            throw new Errors.InternalServerError(error);
         })
     }
 
@@ -28,7 +29,7 @@ export class todo {
               }
           }).catch(error => {
               //! 에러처리
-              throw new Errors.ConflictError(error)
+              throw new Errors.InternalServerError(error)
           })
         if (result){
             return true;
@@ -44,7 +45,7 @@ export class todo {
               return res;
           })
           .catch(error => {
-            throw new Errors.ConflictError(error)
+            throw new Errors.InternalServerError(error)
           })
     }
 
@@ -54,7 +55,7 @@ export class todo {
                 return true;
             })
             .catch((error) => {
-                throw new Errors.ConflictError(error)
+                throw new Errors.InternalServerError(error)
             })
     }
 
