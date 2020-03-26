@@ -27,7 +27,8 @@ export class TodoController {
     @PUT
     public async updateTodo(updateinfo:updatetodo, @HeaderParam('authentication') authentication:string): Promise<string> {
       await this.tokenService.checkAccessToken(authentication);
-      await this.todoService.updateService(updateinfo);
+      const userId:number = await this.tokenService.getUserIdbyAccessToken(authentication);
+      await this.todoService.updateService(updateinfo, userId);
       return 'Sucessfully updated todo';
     }
 
@@ -45,11 +46,7 @@ export class TodoController {
     @Path(':todoid')
     public async deleteTodo(@PathParam('todoid') todoid: number, @HeaderParam('authentication') authentication:string): Promise<string> {
       await this.tokenService.checkAccessToken(authentication);
-      const result:number = await this.todoService.deleteService(todoid);
-      if (result === 1) {
-        return 'Successfully deleted the todo';
-      }
-
-      return 'No todo with that id';
+      const userId:number = await this.tokenService.getUserIdbyAccessToken(authentication);
+      return await this.todoService.deleteService(todoid, userId);
     }
 }

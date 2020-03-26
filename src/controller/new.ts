@@ -1,4 +1,4 @@
-import { POST, Path, Errors } from 'typescript-rest';
+import { POST, Path} from 'typescript-rest';
 import { Inject } from 'typescript-ioc';
 import { createuser } from '../service/user';
 import { signup } from '../types/interface';
@@ -10,11 +10,6 @@ export class NewController {
 
     @POST
     public async signup(newinfo:signup): Promise<string> {
-      const result:boolean = await this.createService.createuser(newinfo);
-      if (result === true) {
-        return 'Signup is successful';
-      }
-
-      throw new Errors.ConflictError('Signup has failed');
+      return await this.createService.createuser(newinfo);
     }
 }

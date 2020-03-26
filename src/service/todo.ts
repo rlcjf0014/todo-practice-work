@@ -14,15 +14,11 @@ export class todo {
       });
   }
 
-  public async updateService(updateinfo:updatetodo):Promise<TodoModel> {
-    return await Todo.findOne({ where: { id: updateinfo.id } })
+  public async updateService(updateinfo:updatetodo, userId:number):Promise<TodoModel> {
+    return await Todo.findOne({ where: { id: updateinfo.id, userId } })
       .then((todo) => {
-        if (todo.complete === 'Y') {
-          todo.complete = 'C';
+          todo.complete = updateinfo.complete;
           return todo.save();
-        }
-        todo.complete = 'Y';
-        return todo.save();
       }).catch((error) => {
         //! 에러처리
         throw new Errors.NotFoundError(error);
@@ -37,9 +33,16 @@ export class todo {
       });
   }
 
-  public async deleteService(todoid:number):Promise<number> {
-    return await Todo.destroy({ where: { id: todoid } })
-      .then((res) => res)
+  public async deleteService(todoid:number, userId:number):Promise<string> {
+    return await Todo.destroy({ where: { id: todoid, userId } })
+      .then((res) => {
+      if (res === 1){
+        return 'Successfully deleted todo';
+      }
+      else {
+        throw new Errors.ConflictError('No todo with that id');
+      }
+      })
       .catch((error) => {
         throw new Errors.ConflictError(error);
       });

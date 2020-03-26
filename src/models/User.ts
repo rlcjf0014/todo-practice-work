@@ -3,16 +3,16 @@ import {
 } from 'sequelize-typescript';
 import { Todo } from './Todo';
 
-// export interface UserModel {
-//     userid:number,
-//     email:string,
-//     password:string,
-//     nickname:string,
-//     salt?: string,
-//     refreshToken?: string,
-//     creationDate: Date,
-//     updatedOn:Date
-// }
+export interface UserModel {
+    userid:number,
+    email:string,
+    password:string,
+    nickname:string,
+    salt?: string,
+    refreshToken?: string,
+    creationDate: Date,
+    updatedOn:Date
+}
 
 @Table
 export class User extends Model<User> {

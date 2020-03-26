@@ -1,5 +1,5 @@
 import {
-  POST, PathParam, HeaderParam, Path, DELETE, Errors, GET,
+  POST, PathParam, HeaderParam, Path, DELETE, GET
 } from 'typescript-rest';
 import { Inject } from 'typescript-ioc';
 import { checkuser, deletetoken, renewAccess } from '../service/user';
@@ -22,12 +22,9 @@ export class UserController {
 
     @POST
     public async login(userinfo:login): Promise<string> {
-      const result:boolean | string = await this.checkService.checkuser(userinfo);
-      if (typeof result === 'string') {
-        return result;
-      }
-
-      throw new Errors.NotFoundError('Login has failed');
+      const result:string = await this.checkService.checkuser(userinfo);
+      return result;
+  
     }
 
     @Inject
@@ -36,29 +33,14 @@ export class UserController {
     @Path(':userid')
     @DELETE
     public async logout(@PathParam('userid') userid: number, @HeaderParam('authentication') authentication:string): Promise<string> {
-      const check:boolean = await this.tokenService.checkAccessToken(authentication);
-      if (check === true) {
-        const result:boolean = await this.deleteService.deletetoken(userid);
-        if (result === true) {
-          return 'Refresh token is successfully deleted';
-        }
-
-        throw new Errors.ConflictError('Token deletion has failed');
-      } else {
-        //! 에러처리 필요
-        throw new Errors.ForbiddenError('Access Token has expired');
-      }
+      await this.tokenService.checkAccessToken(authentication);
+      return await this.deleteService.deletetoken(userid);
     }
 
 
     @Path(':userid')
     @GET
     public async renewToken(@PathParam('userid') userid: number): Promise<string> {
-      const result:string | boolean = await this.renewService.renewToken(userid);
-      if (typeof result === 'string') {
-        return result;
-      }
-
-      throw new Errors.UnauthorizedError('Please Login Again');
+      return await this.renewService.renewToken(userid);
     }
 }
