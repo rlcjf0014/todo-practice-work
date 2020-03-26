@@ -15,7 +15,7 @@ export interface login {
 export interface addtodo{
     content: string,
     date: string,
-    userid: number
+    complete: string
 }
 
 export interface updatetodo {

@@ -17,7 +17,8 @@ export class TodoController {
     public async addTodo(newinfo:addtodo, @HeaderParam("authentication") authentication:string): Promise<string> {
         const check:boolean = await this.tokenService.checkAccessToken(authentication);
         if (check === true) {
-           const result:boolean = await this.todoService.addService(newinfo);
+           const userId:number = await this.tokenService.getUserIdbyAccessToken(authentication);
+           const result:boolean = await this.todoService.addService(newinfo, userId);
            if (result){
                return "Successfully added a new todo";
            }

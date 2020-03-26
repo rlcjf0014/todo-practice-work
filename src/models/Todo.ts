@@ -9,17 +9,17 @@ export class Todo extends Model<Todo> {
     @Column
     id: number;
 
-    @Column
+    @Column({allowNull: false})
     content: string;
 
-    @Column
+    @Column({allowNull: false})
     date: string;
 
-    @Column
+    @Column({allowNull: false})
     complete: string;
 
     @ForeignKey(() => User)
-    @Column
+    @Column({allowNull: false})
     userId!: number;
 
     @CreatedAt

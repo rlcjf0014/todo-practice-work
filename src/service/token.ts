@@ -11,10 +11,10 @@ export class token {
     }
 
     public getUserIdbyAccessToken(authorization:string|undefined):number{
-        const accessToken:string|undefined = authorization && authorization.split(" ")[1];
+        // const accessToken:string|undefined = authorization && authorization.split(" ")[1];
         //if (!accessToken) throw new CustomError("Token is required", 401, "Fail to get accessToken in header");
 
-        const decode:any = jwt.verify(accessToken, this.accessKey);
+        const decode:any = jwt.verify(authorization, this.accessKey);
         const userId = decode.id;
 
         return userId;
