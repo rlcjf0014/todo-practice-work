@@ -1,25 +1,36 @@
-import {Model, Column, Table, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement, ForeignKey} from "sequelize-typescript";
-import {User} from "./User";
+import {
+  Model, Column, Table, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement, ForeignKey,
+} from 'sequelize-typescript';
+import { User } from './User';
+
+export interface TodoModel {
+    id:number,
+    content:string,
+    date:string,
+    complete:string,
+    userId: number,
+    creationDate: Date,
+    updatedOn: Date
+}
 
 @Table
 export class Todo extends Model<Todo> {
-    
     @PrimaryKey
     @AutoIncrement
     @Column
     id: number;
 
-    @Column({allowNull: false})
+    @Column({ allowNull: false })
     content: string;
 
-    @Column({allowNull: false})
+    @Column({ allowNull: false })
     date: string;
 
-    @Column({allowNull: false})
+    @Column({ allowNull: false })
     complete: string;
 
     @ForeignKey(() => User)
-    @Column({allowNull: false})
+    @Column({ allowNull: false })
     userId!: number;
 
     @CreatedAt
@@ -29,5 +40,4 @@ export class Todo extends Model<Todo> {
     @UpdatedAt
     @Column
     updatedOn: Date;
-
 }
