@@ -44,7 +44,54 @@ describe('User Controller Tests', () => {
         });
 
         it('should respond conflict with existing user', done => {
-            
+            userRequest.post({
+                body: `{'email': 'test@gmail.com', 'nickname': 'testUser', 'password': 'hereistest'}`,
+                url: '/new'
+            }, (error, response, body) => {
+                expect(response.statusCode).toBe(409);
+                expect(response.statusMessage).toBe('User already exists');
+                done();
+            })
+
+        });
+    });
+
+    describe('POST /user', () => {
+
+        let accessToken:string;
+
+        it('should respond success message', done => {
+            userRequest.post({
+                body: `{'email': 'test@gmail.com', 'password': 'hereistest'}`,
+                url: '/new'
+            }, (error, response, body) => {
+                expect(response.statusCode).toBe(200);
+                expect(typeof body).toBe('string');
+                accessToken = body;
+                done();
+            })
+        });
+
+        it ('should repond INVALID PASSWORD with invalid password information', done => {
+            userRequest.post({
+                body: `{'email': 'test@gmail.com', 'password': 'wrongpw'}`,
+                url: '/new'
+            }, (error, response, body) => {
+                expect(response.statusCode).toBe(401);
+                expect(response.statusMessage).toBe('Incorrect Password');
+                done();
+            })
+        })
+
+        it ('should repond INVALID PASSWORD with invalid password information', done => {
+            userRequest.post({
+                body: `{'email': 'wrong@gmail.com', 'password': 'hereistest'}`,
+                url: '/new'
+            }, (error, response, body) => {
+                expect(response.statusCode).toBe(401);
+                expect(response.statusMessage).toBe('Incorrect Password');
+                done();
+            })
         })
     })
 

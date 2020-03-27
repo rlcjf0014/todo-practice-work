@@ -13,6 +13,7 @@ export const start = async():Promise<void> => {
   }
   else {
     console.log("Database connection has failed");
+    await sequelize.close();
     await apiServer.stop();
     process.exit(0);
   }
