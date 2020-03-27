@@ -12,7 +12,7 @@
     "swagger": "swaggerGen -c ./swagger.config.yml",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
-    "test": "jest --detectOpenHandles --forceExit",
+    "test": "jest --detectOpenHandles --forceExit --maxWorkers=10",
     "testWatch": "jest --watchAll"
   },
   "repository": {

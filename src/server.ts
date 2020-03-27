@@ -5,10 +5,10 @@ import {ApiServer} from './api-server';
 
 
 export const start = async():Promise<void> => {
-  const db = await sequelize.sync({force: false});
+  const db = await sequelize.sync({force: true});
   const apiServer = new ApiServer();
   if (db) {
-    console.log("Database is now connected!");
+    console.log("Database is now connected");
     await apiServer.start();
   }
   else {

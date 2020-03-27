@@ -1,13 +1,17 @@
-import {testdb} from "../sequelize";
+import {testdb} from "../dbtest";
 import {ApiServer} from "../api-server";
 import * as request from "request";
 import { Server, HttpMethod } from "typescript-rest";
 
+
 const apiServer = new ApiServer();
 const userRequest: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
-                = request.defaults({baseUrl: "http://localhost:${apiServer.PORT}"});
+                = request.defaults({baseUrl: `http://localhost:${apiServer.PORT}`});
+
 
 describe('User Controller Tests', () => {
+
+
 
     beforeAll(async () => {
         await testdb.sync({force: true});
@@ -41,7 +45,7 @@ describe('User Controller Tests', () => {
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(200);
-                expect(response.statusMessage).toBe('Sign up is successful');
+                expect(body).toBe('Sign up is successful');
                 done();
             })
         });
@@ -54,10 +58,9 @@ describe('User Controller Tests', () => {
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(409);
-                expect(response.statusMessage).toBe('User already exists');
+                expect(response.statusMessage).toBe('ConflictError: User already exists');
                 done();
             })
-
         });
     });
 

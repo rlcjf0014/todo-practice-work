@@ -31,9 +31,6 @@ export class createuser {
             throw new Errors.ConflictError('User already exists');
           }
         })
-        .catch((error) => {
-          throw new Errors.InternalServerError(error);
-        });
     }
 }
 
@@ -67,9 +64,6 @@ export class checkuser {
             throw new Errors.UnauthorizedError("Invalid Email");
           }
           })
-        .catch((error) => {
-          throw new Errors.InternalServerError(error);
-        });
     }
 }
 
@@ -85,9 +79,6 @@ export class deletetoken {
         };
         throw new Errors.ConflictError('Refresh token is already deleted')
       })
-      .catch((error) => {
-        throw new Errors.InternalServerError(error);
-      });
   }
 }
 
@@ -107,8 +98,5 @@ export class renewAccess {
             throw new Errors.ForbiddenError("Refresh Token has expired");
           }
         })
-        .catch((error) => {
-          throw new Errors.InternalServerError(error);
-        });
     }
 }
