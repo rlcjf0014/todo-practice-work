@@ -4,7 +4,7 @@ import * as request from "request";
 import { Server, HttpMethod } from "typescript-rest";
 
 const apiServer = new ApiServer();
-const newRequest: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
+const userRequest: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
                 = request.defaults({baseUrl: `http://localhost:${apiServer.PORT}`});
 
 describe('User Controller Tests', () => {
@@ -31,7 +31,24 @@ describe('User Controller Tests', () => {
         });
     });
 
-    
+    describe('POST /new', () => {
+        it('should respond success message', done => {
+            userRequest.post({
+                body: `{'email': 'test@gmail.com', 'nickname': 'testUser', 'password': 'hereistest'}`,
+                url: '/new'
+            }, (error, response, body) => {
+                expect(response.statusCode).toBe(200);
+                expect(response.statusMessage).toBe('Sign up is successful');
+                done();
+            })
+        });
+
+        it('should respond conflict with existing user', done => {
+            
+        })
+    })
+
+
 
 
 
