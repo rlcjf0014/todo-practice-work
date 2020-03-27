@@ -48,6 +48,7 @@ export class checkuser {
       return await User
         .findOne({ where: { email: userinfo.email } })
         .then(async (res) => {
+          if (res){
             const secretpw:string = await this.pwService.getEncryPw(userinfo.password, res.salt);
             if (secretpw === res.password) {
               const newAccessToken:string = await this.tokenService.generateAccessToken(res);
@@ -61,6 +62,10 @@ export class checkuser {
             else{
               throw new Errors.UnauthorizedError("Incorrect Password");
             }
+          }
+          else {
+            throw new Errors.UnauthorizedError("Invalid Email");
+          }
           })
         .catch((error) => {
           throw new Errors.InternalServerError(error);
