@@ -23,7 +23,7 @@ describe('User Controller Tests', () => {
         return apiServer.stop();
     })
 
-    // let accessToken:string;
+    let accessToken:string;
 
     describe('The Rest Server', () => {
         it('should provide a catalog containing the exposed paths', () => {
@@ -58,7 +58,7 @@ describe('User Controller Tests', () => {
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(409);
-                expect(response.statusMessage).toBe('ConflictError: User already exists');
+                expect(response.statusMessage).toBe('Conflict');
                 done();
             })
         });
@@ -70,12 +70,12 @@ describe('User Controller Tests', () => {
             userRequest.post({
                 body: {email: 'test@gmail.com', password: 'hereistest'},
                 json: true,
-                url: '/new'
+                url: '/user'
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(200);
                 expect(typeof body).toBe('string');
-                // accessToken = body;
+                accessToken = body;
                 done();
             })
         });
@@ -84,11 +84,11 @@ describe('User Controller Tests', () => {
             userRequest.post({
                 body: {email: 'test@gmail.com', password: 'wrongpw'},
                 json: true,
-                url: '/new'
+                url: '/user'
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(401);
-                expect(response.statusMessage).toBe('Incorrect Password');
+                expect(response.statusMessage).toBe('Unauthorized');
                 done();
             })
         })
@@ -97,20 +97,100 @@ describe('User Controller Tests', () => {
             userRequest.post({
                 body: {email: 'wrong@gmail.com', password: 'hereistest'},
                 json: true,
-                url: '/new'
+                url: '/user'
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(401);
-                expect(response.statusMessage).toBe('Invalid Email');
+                expect(response.statusMessage).toBe('Unauthorized');
                 done();
             })
         })
     });
 
-    // describe('DELETE /user/:userid', () => {
+    describe('DELETE /user/:userid', () => {
 
-    //     it ('should respond ')
+        it ('should respond JWT token error with invalid access token', done => {
+            userRequest.delete({
+                headers: {authentication: "randomtoken"},
+                url: '/user/1'
+            }, (error, response, body) => {
+                if(error) throw error
+                expect(response.statusCode).toBe(500);
+                expect(response.statusMessage).toBe('Internal Server Error');
+                // expect(body).toBe("hi");
+                //! 에러처리 전체적으로 세부화
+                done();
+            })
+        });
 
-    // })
+        it ('should respond success message', done => {
+            userRequest.delete({
+                headers: {authentication: accessToken},
+                url: '/user/1'
+            }, (error, response, body) => {
+                if(error) throw error
+                expect(response.statusCode).toBe(200);
+                expect(body).toBe('Refresh token is successfully deleted');
+                done();
+            })
+        });
+
+
+        it ('should respond refresh token already deleted message', done => {
+            userRequest.delete({
+                headers: {authentication: accessToken},
+                url: '/user/1'
+            }, (error, response, body) => {
+                if(error) throw error
+                expect(response.statusCode).toBe(409);
+                expect(response.statusMessage).toBe('Conflict');
+                done();
+            })
+        });
+    });
+
+    describe('GET /user/:userid', () => {
+
+        it ('should respond JWT token error with invalid access token', done => {
+            userRequest.delete({
+                headers: {authentication: "randomtoken"},
+                url: '/user/1'
+            }, (error, response, body) => {
+                if(error) throw error
+                expect(response.statusCode).toBe(500);
+                expect(response.statusMessage).toBe('Internal Server Error');
+                // expect(body).toBe("hi");
+                //! 에러처리 전체적으로 세부화
+                done();
+            })
+        });
+
+        it ('should respond success message', done => {
+            userRequest.delete({
+                headers: {authentication: accessToken},
+                url: '/user/1'
+            }, (error, response, body) => {
+                if(error) throw error
+                expect(response.statusCode).toBe(200);
+                expect(body).toBe('Refresh token is successfully deleted');
+                done();
+            })
+        });
+
+
+        it ('should respond refresh token already deleted message', done => {
+            userRequest.delete({
+                headers: {authentication: accessToken},
+                url: '/user/1'
+            }, (error, response, body) => {
+                if(error) throw error
+                expect(response.statusCode).toBe(409);
+                expect(response.statusMessage).toBe('Conflict');
+                done();
+            })
+        });
+    });
+
+
 
 })

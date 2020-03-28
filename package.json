@@ -13,7 +13,8 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
     "test": "jest --detectOpenHandles --forceExit --maxWorkers=10",
-    "testWatch": "jest --watchAll"
+    "testWatch": "jest --watchAll",
+    "testCoverage": "jest --coverage --detectOpenHandles --forceExit --maxWorkers=10"
   },
   "repository": {
     "type": "git",
