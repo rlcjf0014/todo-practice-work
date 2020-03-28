@@ -43,8 +43,5 @@ export class todo {
         throw new Errors.ConflictError('No todo with that id');
       }
       })
-      .catch((error) => {
-        throw new Errors.ConflictError(error);
-      });
   }
 }

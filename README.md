@@ -12,15 +12,27 @@ Create server to operate a simple todolist application for web.
 - sequelize
 - jwt
 
+# Installation
+```js
+npm start
+```
+
+# Quick Start
+```js
+npm start
+```
+or
+```js
+yarn start
+```
+
 # Function 
 - Sign Up
 - Login
 - Logout
-- Choose Date
 - Input todo list
-- Complete todo list
+- Update complete status todo list
 - Delete todo list
-- Organize todo list by date
 
 # Schema
 https://www.erdcloud.com/d/5eLdfPncoeKkJkqK7

@@ -31,9 +31,6 @@ export class createuser {
             throw new Errors.ConflictError('User already exists');
           }
         })
-        .catch((error) => {
-          throw new Errors.InternalServerError(error);
-        });
     }
 }
 
@@ -48,6 +45,7 @@ export class checkuser {
       return await User
         .findOne({ where: { email: userinfo.email } })
         .then(async (res) => {
+          if (res){
             const secretpw:string = await this.pwService.getEncryPw(userinfo.password, res.salt);
             if (secretpw === res.password) {
               const newAccessToken:string = await this.tokenService.generateAccessToken(res);
@@ -61,10 +59,11 @@ export class checkuser {
             else{
               throw new Errors.UnauthorizedError("Incorrect Password");
             }
+          }
+          else {
+            throw new Errors.UnauthorizedError("Invalid Email");
+          }
           })
-        .catch((error) => {
-          throw new Errors.InternalServerError(error);
-        });
     }
 }
 
@@ -80,9 +79,6 @@ export class deletetoken {
         };
         throw new Errors.ConflictError('Refresh token is already deleted')
       })
-      .catch((error) => {
-        throw new Errors.InternalServerError(error);
-      });
   }
 }
 
@@ -102,8 +98,5 @@ export class renewAccess {
             throw new Errors.ForbiddenError("Refresh Token has expired");
           }
         })
-        .catch((error) => {
-          throw new Errors.InternalServerError(error);
-        });
     }
 }

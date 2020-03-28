@@ -5,15 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run build && node dist/index.js",
-    "please": "node --require ts-node/register index.ts",
     "build": "npm run clean && tsc && npm run swagger",
     "clean": "rimraf dist",
     "dev": "ts-node src/index.ts",
     "swagger": "swaggerGen -c ./swagger.config.yml",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
-    "test": "jest --detectOpenHandles --forceExit",
-    "testWatch": "jest --watchAll"
+    "test": "jest --detectOpenHandles --forceExit --maxWorkers=10",
+    "testWatch": "jest --watchAll",
+    "testCoverage": "jest --coverage --detectOpenHandles --forceExit --maxWorkers=10"
   },
   "repository": {
     "type": "git",

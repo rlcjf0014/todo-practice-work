@@ -11,7 +11,6 @@ export class ApiServer {
 
     private readonly app: express.Application;
     private server: http.Server = null;
-    handleError: any;
 
     constructor() {
         this.app = express();
