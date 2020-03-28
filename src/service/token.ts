@@ -32,13 +32,10 @@ export class token {
     }
 
     public generateAccessToken(user:User):string {
-      
         return jwt.sign({
           id: user.userid,
           nickname: user.nickname,
           email: user.email,
-          createAt:
-            user.creationDate,
         }, this.accessKey, { expiresIn: '1d' });
       
     }

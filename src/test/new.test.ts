@@ -2,7 +2,8 @@ import {testdb} from "../dbtest";
 import {ApiServer} from "../api-server";
 import * as request from "request";
 import { Server, HttpMethod } from "typescript-rest";
-
+import * as jwt from 'jsonwebtoken';
+require('dotenv').config();
 
 const apiServer = new ApiServer();
 const userRequest: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
@@ -24,6 +25,7 @@ describe('User Controller Tests', () => {
     })
 
     let accessToken:string;
+    let expiredAccess:string;
 
     describe('The Rest Server', () => {
         it('should provide a catalog containing the exposed paths', () => {
@@ -107,6 +109,45 @@ describe('User Controller Tests', () => {
         })
     });
 
+    describe('GET /user/:userid', () => {
+
+        it ('should respond error with invalid user', done => {
+            userRequest.get({
+                url: '/user/2'
+            }, (error, response, body) => {
+                if(error) throw error
+                expect(response.statusCode).toBe(500);
+                expect(response.statusMessage).toBe('Internal Server Error');
+                //! 에러처리 전체적으로 세부화
+                done();
+            })
+        });
+
+        it ('should respond success message', done => {
+            userRequest.get({
+                url: '/user/1'
+            }, (error, response, body) => {
+                if(error) throw error
+                expect(response.statusCode).toBe(200);
+                expect(typeof body).toBe('string');
+                done();
+            })
+        });
+
+
+        // it ('should respond refresh token already deleted message', done => {
+        //     userRequest.delete({
+        //         headers: {authentication: accessToken},
+        //         url: '/user/1'
+        //     }, (error, response, body) => {
+        //         if(error) throw error
+        //         expect(response.statusCode).toBe(409);
+        //         expect(response.statusMessage).toBe('Conflict');
+        //         done();
+        //     })
+        // });
+    });
+
     describe('DELETE /user/:userid', () => {
 
         it ('should respond JWT token error with invalid access token', done => {
@@ -123,37 +164,15 @@ describe('User Controller Tests', () => {
             })
         });
 
-        it ('should respond success message', done => {
+        it ('should respond JWT token error with expired access token', done => {
+            expiredAccess = jwt.sign({
+                id: 1,
+                nickname: 'testUser',
+                email: 'test@gmail.com'
+            }, process.env.JWT_SECRET_ACCESS, { expiresIn: '0.1s'}); 
+
             userRequest.delete({
-                headers: {authentication: accessToken},
-                url: '/user/1'
-            }, (error, response, body) => {
-                if(error) throw error
-                expect(response.statusCode).toBe(200);
-                expect(body).toBe('Refresh token is successfully deleted');
-                done();
-            })
-        });
-
-
-        it ('should respond refresh token already deleted message', done => {
-            userRequest.delete({
-                headers: {authentication: accessToken},
-                url: '/user/1'
-            }, (error, response, body) => {
-                if(error) throw error
-                expect(response.statusCode).toBe(409);
-                expect(response.statusMessage).toBe('Conflict');
-                done();
-            })
-        });
-    });
-
-    describe('GET /user/:userid', () => {
-
-        it ('should respond JWT token error with invalid access token', done => {
-            userRequest.delete({
-                headers: {authentication: "randomtoken"},
+                headers: {authentication: expiredAccess},
                 url: '/user/1'
             }, (error, response, body) => {
                 if(error) throw error
@@ -190,6 +209,7 @@ describe('User Controller Tests', () => {
             })
         });
     });
+
 
 
 
