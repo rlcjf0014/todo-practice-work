@@ -150,29 +150,29 @@ describe('User Controller Tests', () => {
 
     describe('DELETE /user/:userid', () => {
 
+        // it ('should respond JWT token error with expired access token', done => {
+        //     expiredAccess = jwt.sign({
+        //         id: 1,
+        //         nickname: 'testUser',
+        //         email: 'test@gmail.com'
+        //     }, process.env.JWT_SECRET_ACCESS, { expiresIn: '0.1s'}); 
+
+        //     userRequest.delete({
+        //         headers: {authentication: expiredAccess},
+        //         url: '/user/1'
+        //     }, (error, response, body) => {
+        //         if(error) throw error
+        //         expect(response.statusCode).toBe(500);
+        //         expect(response.statusMessage).toBe('Internal Server Error');
+        //         // expect(body).toBe("hi");
+        //         //! 에러처리 전체적으로 세부화
+        //         done();
+        //     })
+        // });
+
         it ('should respond JWT token error with invalid access token', done => {
             userRequest.delete({
                 headers: {authentication: "randomtoken"},
-                url: '/user/1'
-            }, (error, response, body) => {
-                if(error) throw error
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe('Internal Server Error');
-                // expect(body).toBe("hi");
-                //! 에러처리 전체적으로 세부화
-                done();
-            })
-        });
-
-        it ('should respond JWT token error with expired access token', done => {
-            expiredAccess = jwt.sign({
-                id: 1,
-                nickname: 'testUser',
-                email: 'test@gmail.com'
-            }, process.env.JWT_SECRET_ACCESS, { expiresIn: '0.1s'}); 
-
-            userRequest.delete({
-                headers: {authentication: expiredAccess},
                 url: '/user/1'
             }, (error, response, body) => {
                 if(error) throw error
