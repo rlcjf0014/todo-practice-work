@@ -1,8 +1,10 @@
 import {testdb} from "../dbtest";
 import {ApiServer} from "../api-server";
 import * as request from "request";
+// import request from "supertest";
+
 import { Server, HttpMethod } from "typescript-rest";
-import * as jwt from 'jsonwebtoken';
+// import * as jwt from 'jsonwebtoken';
 require('dotenv').config();
 
 const apiServer = new ApiServer();
@@ -25,7 +27,7 @@ describe('User Controller Tests', () => {
     })
 
     let accessToken:string;
-    let expiredAccess:string;
+    // let expiredAccess:string;
 
     describe('The Rest Server', () => {
         it('should provide a catalog containing the exposed paths', () => {
@@ -130,6 +132,7 @@ describe('User Controller Tests', () => {
                 if(error) throw error
                 expect(response.statusCode).toBe(200);
                 expect(typeof body).toBe('string');
+                //* 토큰
                 done();
             })
         });

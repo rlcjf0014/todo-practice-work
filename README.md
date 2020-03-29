@@ -14,10 +14,13 @@ Create server to operate a simple todolist application for web.
 
 # Installation
 ```js
-npm start
+npm install
 ```
 
 # Quick Start
+
+**Make Sure to create database 'todo' for actual service and 'todotest' for testing. sequelize-cli is available.**
+
 ```js
 npm start
 ```
