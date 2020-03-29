@@ -53,9 +53,7 @@ Body: {
     password: "apache123"
 }
 
-Response (201): {
-    message: "User is created."
-}
+Response: 'Sign up is successful'
 
 ## Login
 
@@ -68,7 +66,7 @@ Body: {
 }
 
 Response (200) : {
-    message: "User is now logged in."
+    accessToken: ...
 }
 
 ## Logout
@@ -96,7 +94,8 @@ Response (201): {
     contents: "Take out trash",
     date: "2020-03-24",
     completestatus: "Y",
-    todoid: 1
+    todoid: 1,
+    ...
 }
 
 ## Update todo list
@@ -109,19 +108,13 @@ Body: {
     completestatus: "C"
 }
 
-Response (201): {
-    todoid: 1,
-    completestatus: "C"
-}
+Response: 'Successfully updated todo'
 
 ## Delete todo list
 
 **DELETE** /todo/:todoid
 - This endpoint deletes the status of a todo list. 
 
-Response (200): {
-    message: "Successfully deleted todo list,"
-}
 
 ## Get todo list
 
