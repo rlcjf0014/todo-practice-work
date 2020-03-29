@@ -41,7 +41,7 @@ export class checkuser {
     @Inject
     private tokenService:token;
 
-    public async checkuser(userinfo:login):Promise<string> {
+    public async checkuser(userinfo:login):Promise<object> {
       return await User
         .findOne({ where: { email: userinfo.email } })
         .then(async (res) => {
@@ -51,7 +51,7 @@ export class checkuser {
               const newAccessToken:string = await this.tokenService.generateAccessToken(res);
               const newRefreshToken:string = await this.tokenService.generateRefreshToken(res.userid);
               return await User.update({ refreshToken: newRefreshToken }, { where: { email: userinfo.email } })
-                .then(() => newAccessToken)
+                .then(() => {return {accessToken: newAccessToken}})
                 .catch((e) => {
                   throw new Errors.ConflictError(e);
                 })

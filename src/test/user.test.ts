@@ -78,8 +78,8 @@ describe('User Controller Tests', () => {
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(200);
-                expect(typeof body).toBe('string');
-                accessToken = body;
+                expect(typeof body).toBe('object');
+                accessToken = body.accessToken;
                 done();
             })
         });
