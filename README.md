@@ -14,7 +14,7 @@ Create server to operate a simple todolist application for web.
 
 # Installation
 ```js
-npm start
+npm install
 ```
 
 # Quick Start
