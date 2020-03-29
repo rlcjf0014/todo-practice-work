@@ -1,43 +1,30 @@
 import {testdb} from "../dbtest";
 import {ApiServer} from "../api-server";
 import * as request from "request";
-// import request from "supertest";
-import { Server, HttpMethod } from "typescript-rest";
 import * as jwt from 'jsonwebtoken';
+import { Server, HttpMethod } from "typescript-rest";
 require('dotenv').config();
 
 const apiServer = new ApiServer();
 const tokenRequest: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
                 = request.defaults({baseUrl: `http://localhost:${apiServer.PORT}`});
 
-let accessToken:string;
 
-const initializeData = function ():void {
-    tokenRequest.post({
-        body: {email: 'test@gmail.com', nickname:'testUser', password: 'hereistest'},
-        json: true,
-        url: '/new'
-    }, (error, response, body) => {
-        if(error) throw error
-        return;
-    });
-    tokenRequest.post({
-        body: {email: 'test@gmail.com', password: 'hereistest'},
-        json: true,
-        url: '/user'
-    }, (error, response, body) => {
-        if(error) throw error
-        accessToken = body;
-        return;
-    })
-}
 
-describe('Token Controller Tests', () => {
+describe('Todo Controller Tests', () => {
+
+    let accessToken:string; 
 
     beforeAll(async () => {
         await testdb.sync({force: true});
         await apiServer.start();
-        return initializeData();
+        await testdb.query("insert into Users values (default, 'test@gmail.com', 'hipassword', 'pingu', default, default, default, default)")
+        accessToken = jwt.sign({
+            id: 1,
+            nickname:'testUser',
+            email: 'test@gmail.com'
+        }, process.env.JWT_SECRET_ACCESS, { expiresIn: '1d'});
+        return;
     })
 
     afterAll(async () => {
@@ -94,7 +81,7 @@ describe('Token Controller Tests', () => {
         it ('should respond type error with invalid input information', done => {
             tokenRequest.post({
                 headers: {authentication: accessToken},
-                body: {content: 1234, date: '2020-03-30', complete: 'Y'},
+                body: {date: '2020-03-30', complete: 'Y'},
                 json: true,
                 url: '/todo'
             }, (error, response, body) => {
@@ -131,26 +118,22 @@ describe('Token Controller Tests', () => {
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(200);
-                expect(typeof body).toBe('object');
-                expect (body).toMatchObject({
-                    content: expect.any(String),
-                    date: expect.any(String),
-                    complete: 'C'
-                });
+                expect(typeof body).toBe('string');
+                expect (body).toBe('Successfully updated todo')
                 done();
             })
         });
 
-        it ('should respond type error with invalid input information', done => {
+        it ('should respond Not Found with invalid todo information', done => {
             tokenRequest.put({
                 headers: {authentication: accessToken},
-                body: {id:2, complete: 'C'},
+                body: {id:4, complete: 'C'},
                 json: true,
                 url: '/todo'
             }, (error, response, body) => {
                 if(error) throw error
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe('Internal Server Error');
+                expect(response.statusCode).toBe(404);
+                expect(response.statusMessage).toBe('Not Found');
                 done();
             });
         })
@@ -176,8 +159,8 @@ describe('Token Controller Tests', () => {
                 url: '/todo/2020-03-20'
             }, (error, response, body) => {
                 if(error) throw error
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe('Internal Server Error');
+                expect(response.statusCode).toBe(200);
+                expect(body).toBe('[]')
                 done();
             })
         });
@@ -189,12 +172,7 @@ describe('Token Controller Tests', () => {
             }, (error, response, body) => {
                 if(error) throw error
                 expect(response.statusCode).toBe(200);
-                expect(typeof body).toBe('object');
-                expect (body).toMatchObject({
-                    content: expect.any(String),
-                    date: expect.any(String),
-                    complete: expect.any(String)
-                });
+                expect(typeof JSON.parse(body)).toBe('object');
                 done();
             })
         });
@@ -217,11 +195,11 @@ describe('Token Controller Tests', () => {
         it ('should respond error with invalid todo id', done => {
             tokenRequest.delete({
                 headers: {authentication: accessToken},
-                url: '/todo/2'
+                url: '/todo/5'
             }, (error, response, body) => {
                 if(error) throw error
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe('Internal Server Error');
+                expect(response.statusCode).toBe(409);
+                expect(response.statusMessage).toBe('Conflict');
                 done();
             })
         });

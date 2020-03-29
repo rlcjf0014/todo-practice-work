@@ -29,7 +29,7 @@ export class TodoController {
       await this.tokenService.checkAccessToken(authentication);
       const userId:number = await this.tokenService.getUserIdbyAccessToken(authentication);
       await this.todoService.updateService(updateinfo, userId);
-      return 'Sucessfully updated todo';
+      return 'Successfully updated todo';
     }
 
     @GET
