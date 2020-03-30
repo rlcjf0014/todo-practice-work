@@ -1,7 +1,7 @@
 import {
   Model, Column, Table, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement, ForeignKey,
-} from 'sequelize-typescript';
-import { User } from './User';
+} from "sequelize-typescript";
+import { User } from "./User";
 
 export interface TodoModel {
     id:number,

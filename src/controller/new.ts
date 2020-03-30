@@ -1,9 +1,9 @@
-import { POST, Path} from 'typescript-rest';
-import { Inject } from 'typescript-ioc';
-import { createuser } from '../service/user';
-import { signup } from '../types/interface';
+import { POST, Path} from "typescript-rest";
+import { Inject } from "typescript-ioc";
+import { createuser } from "../service/user";
+import { signup } from "../types/interface";
 
-@Path('/new')
+@Path("/new")
 export class NewController {
     @Inject
     private createService: createuser;

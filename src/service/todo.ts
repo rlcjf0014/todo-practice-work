@@ -1,6 +1,6 @@
-import { Errors } from 'typescript-rest';
-import { Todo, TodoModel } from '../models/Todo';
-import { addtodo, updatetodo } from '../types/interface';
+import { Errors } from "typescript-rest";
+import { Todo, TodoModel } from "../models/Todo";
+import { addtodo, updatetodo } from "../types/interface";
 
 
 export class todo {
@@ -37,11 +37,11 @@ export class todo {
     return await Todo.destroy({ where: { id: todoid, userId } })
       .then((res) => {
       if (res === 1){
-        return 'Successfully deleted todo';
+        return "Successfully deleted todo";
       }
       else {
-        throw new Errors.ConflictError('No todo with that id');
+        throw new Errors.ConflictError("No todo with that id");
       }
-      })
+      });
   }
 }

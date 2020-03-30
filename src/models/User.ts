@@ -1,7 +1,7 @@
 import {
   Model, Column, Table, HasMany, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement,
-} from 'sequelize-typescript';
-import { Todo } from './Todo';
+} from "sequelize-typescript";
+import { Todo } from "./Todo";
 
 export interface UserModel {
     userid:number,
