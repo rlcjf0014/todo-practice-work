@@ -1,9 +1,9 @@
-import { Inject } from 'typescript-ioc';
-import { Errors } from 'typescript-rest';
-import { User} from '../models/User';
-import { signup, login } from '../types/interface';
-import { createSalt } from './crypto';
-import { token } from './token';
+import { Inject } from "typescript-ioc";
+import { Errors } from "typescript-rest";
+import { User} from "../models/User";
+import { signup, login } from "../types/interface";
+import { createSalt } from "./crypto";
+import { token } from "./token";
 
 export class createuser {
     @Inject
@@ -25,12 +25,12 @@ export class createuser {
         })
         .spread((memo, created) => {
           if (created) {
-            return 'Sign up is successful';
+            return "Sign up is successful";
           }
           else {
-            throw new Errors.ConflictError('User already exists');
+            throw new Errors.ConflictError("User already exists");
           }
-        })
+        });
     }
 }
 
@@ -51,10 +51,10 @@ export class checkuser {
               const newAccessToken:string = await this.tokenService.generateAccessToken(res);
               const newRefreshToken:string = await this.tokenService.generateRefreshToken(res.userid);
               return await User.update({ refreshToken: newRefreshToken }, { where: { email: userinfo.email } })
-                .then(() => {return {accessToken: newAccessToken}})
+                .then(() => {return {accessToken: newAccessToken};})
                 .catch((e) => {
                   throw new Errors.ConflictError(e);
-                })
+                });
             }
             else{
               throw new Errors.UnauthorizedError("Incorrect Password");
@@ -63,7 +63,7 @@ export class checkuser {
           else {
             throw new Errors.UnauthorizedError("Invalid Email");
           }
-          })
+          });
     }
 }
 
@@ -76,9 +76,9 @@ export class deletetoken {
       .then((res) => {
         if (res[0] === 1){
           return "Refresh token is successfully deleted";
-        };
-        throw new Errors.ConflictError('Refresh token is already deleted')
-      })
+        }
+        throw new Errors.ConflictError("Refresh token is already deleted");
+      });
   }
 }
 
@@ -97,6 +97,6 @@ export class renewAccess {
           else{
             throw new Errors.ForbiddenError("Refresh Token has expired");
           }
-        })
+        });
     }
 }

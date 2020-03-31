@@ -1,15 +1,15 @@
 import {
   POST, PathParam, HeaderParam, Path, DELETE, GET
-} from 'typescript-rest';
-import { Inject } from 'typescript-ioc';
-import { checkuser, deletetoken, renewAccess } from '../service/user';
-import { token } from '../service/token';
-import { login } from '../types/interface';
+} from "typescript-rest";
+import { Inject } from "typescript-ioc";
+import { checkuser, deletetoken, renewAccess } from "../service/user";
+import { token } from "../service/token";
+import { login } from "../types/interface";
 
-require('dotenv').config();
+require("dotenv").config();
 
 
-@Path('/user')
+@Path("/user")
 export class UserController {
     @Inject
     private checkService: checkuser;
@@ -21,8 +21,8 @@ export class UserController {
     private renewService: renewAccess;
 
     @POST
-    public async login(userinfo:login): Promise<string> {
-      const result:string = await this.checkService.checkuser(userinfo);
+    public async login(userinfo:login): Promise<object> {
+      const result:object = await this.checkService.checkuser(userinfo);
       return result;
   
     }
@@ -30,17 +30,17 @@ export class UserController {
     @Inject
     private tokenService: token;
 
-    @Path(':userid')
+    @Path(":userid")
     @DELETE
-    public async logout(@PathParam('userid') userid: number, @HeaderParam('authentication') authentication:string): Promise<string> {
+    public async logout(@PathParam("userid") userid: number, @HeaderParam("authentication") authentication:string): Promise<string> {
       await this.tokenService.checkAccessToken(authentication);
       return await this.deleteService.deletetoken(userid);
     }
 
 
-    @Path(':userid')
+    @Path(":userid")
     @GET
-    public async renewToken(@PathParam('userid') userid: number): Promise<string> {
+    public async renewToken(@PathParam("userid") userid: number): Promise<string> {
       return await this.renewService.renewToken(userid);
     }
 }

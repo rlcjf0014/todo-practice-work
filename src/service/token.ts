@@ -1,8 +1,8 @@
-import * as jwt from 'jsonwebtoken';
+import * as jwt from "jsonwebtoken";
 // import { Errors } from 'typescript-rest';
-import { User } from '../models/User';
+import { User } from "../models/User";
 
-require('dotenv').config();
+require("dotenv").config();
 
 export class token {
     private refreshKey:any = process.env.JWT_SECRET_REFRESH;
@@ -11,7 +11,7 @@ export class token {
 
     public generateRefreshToken(id:number):string {
       
-        return jwt.sign({ id }, this.refreshKey, { expiresIn: '90d' });
+        return jwt.sign({ id }, this.refreshKey, { expiresIn: "90d" });
      
     }
 
@@ -36,7 +36,7 @@ export class token {
           id: user.userid,
           nickname: user.nickname,
           email: user.email,
-        }, this.accessKey, { expiresIn: '1d' });
+        }, this.accessKey, { expiresIn: "1d" });
       
     }
 
