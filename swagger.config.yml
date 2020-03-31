@@ -1,8 +1,9 @@
 swagger:
-  outputDirectory: ./dist
+  outputDirectory: ./src
   entryFile: 
-    - ./src/controller/*
+    - ./src/controller/*.ts
   outputFormat: OpenApi_3
+  host: localhost:3000
   name: Typescript-rest Todo Application
   description: A Sample application using Typescipt-rest library
   license: MIT
@@ -12,8 +13,4 @@ swagger:
     default:
       type: apiKey
       in: header
-      name: Authorization
-    secondAuthenticator:
-      type: apiKey
-      in: header
-      name: Authorization
+      name: authentication

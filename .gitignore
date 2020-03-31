@@ -3,3 +3,5 @@ dist/
 .env
 
 coverage/
+src/swagger.json
+src/swagger.yaml

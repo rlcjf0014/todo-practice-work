@@ -21,8 +21,8 @@ export class UserController {
     private renewService: renewAccess;
 
     @POST
-    public async login(userinfo:login): Promise<string> {
-      const result:string = await this.checkService.checkuser(userinfo);
+    public async login(userinfo:login): Promise<object> {
+      const result:object = await this.checkService.checkuser(userinfo);
       return result;
   
     }
