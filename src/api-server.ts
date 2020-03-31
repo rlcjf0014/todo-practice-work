@@ -4,8 +4,6 @@ import * as http from "http";
 import * as morgan from "morgan";
 import { Server} from "typescript-rest";
 import path = require("path");
-import * as swaggerUi from "swagger-ui-express";
-import swaggerDocument from "./swagger.json";
 require("dotenv").config();
 
 export class ApiServer {
@@ -63,8 +61,5 @@ export class ApiServer {
         this.app.use(express.static(path.join(__dirname, "public"), { maxAge: 31557600000 }));
         this.app.use(cors());
         this.app.use(morgan("combined"));
-        this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-        
-        // this.configureAuthenticator();
     }
 }

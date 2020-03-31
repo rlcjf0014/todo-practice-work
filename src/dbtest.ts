@@ -10,7 +10,7 @@ require("dotenv").config()
 // });
 
 export const testdb = new Sequelize({
-  dialect: 'mariadb',
+  dialect: 'mysql',
   database: process.env.DB_TEST,
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
