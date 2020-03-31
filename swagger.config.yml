@@ -3,7 +3,6 @@ swagger:
   entryFile: 
     - ./src/controller/*.ts
   outputFormat: OpenApi_3
-  host: localhost:3000
   name: Typescript-rest Todo Application
   description: A Sample application using Typescipt-rest library
   license: MIT
