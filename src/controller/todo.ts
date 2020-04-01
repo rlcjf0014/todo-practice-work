@@ -6,12 +6,13 @@ import { todo } from "../service/todo";
 import { TodoModel } from "../models/Todo";
 import { addtodo, updatetodo } from "../types/interface";
 import { token } from "../service/token";
+import { Tags } from "typescript-rest-swagger";
 
 @Path("/todo")
+@Tags("Todo")
 export class TodoController {
     @Inject
     private todoService:todo;
-
     @Inject
     private tokenService:token;
 

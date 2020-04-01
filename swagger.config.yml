@@ -9,13 +9,14 @@ swagger:
   produces: [application/json]
   version: 0.0.1
   securityDefinitions:
-    APIKeyHeader:
+    bearerAuth:
       type: apiKey
       in: header
-      name: authentication
-      path?api_key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlja25hbWUiOiJwaW5ndSIsImVtYWlsIjoiaGlsbEBnbWFpbC5jb20iLCJpYXQiOjE1ODU3MTQ1NzMsImV4cCI6MTU5NDM1NDU3M30.s6cR3CxmXiAdQsD0s7i0wXjHJKupLFZRaNM_7Xe_A9A
-  security:
-    - APIKeyHeader: []
+      name: Authorization
+      description: Enter your access token received after login.  
+
+security:
+    - bearerAuth: []
 
 
     # "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlja25hbWUiOiJwaW5ndSIsImVtYWlsIjoiaGlsbEBnbWFpbC5jb20iLCJpYXQiOjE1ODU3MTQ1NzMsImV4cCI6MTU5NDM1NDU3M30.s6cR3CxmXiAdQsD0s7i0wXjHJKupLFZRaNM_7Xe_A9A"

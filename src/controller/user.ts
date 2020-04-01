@@ -5,11 +5,13 @@ import { Inject } from "typescript-ioc";
 import { checkuser, deletetoken, renewAccess } from "../service/user";
 import { token } from "../service/token";
 import { login } from "../types/interface";
+import { Tags } from "typescript-rest-swagger";
 
 require("dotenv").config();
 
 
 @Path("/user")
+@Tags("User")
 export class UserController {
     @Inject
     private checkService: checkuser;

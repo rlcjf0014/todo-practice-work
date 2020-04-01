@@ -21,7 +21,7 @@
       "target": "es2016"
     },
     "include": [
-      "src/**/*.ts", "index.ts", "src/*.ts"
+      "src/**/*.ts", "index.ts", "src/*.ts", "Todo.ts"
     ]
   }
   
