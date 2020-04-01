@@ -12,11 +12,17 @@ paths:
             operationId: UserLogin
             responses:
                 '200':
-                    description: Ok
+                    description: Success message for user login
                     content:
                         application/json:
                             schema:
                                 type: object
+                                properties: 
+                                    accessToken:
+                                        type: string
+                            example: 
+                                accessToken: 
+                                    e71sdf....
             description: "This endpoint allows the user to login."
             tags:
                 - User
@@ -24,54 +30,63 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/login'
+                            $ref: '#/components/Models/login'
+                            example: 
+                                email: test@gmail.com
+                                password: testing
+
                 required: true
     '/user/{userid}':
         delete:
             summary: User Logout
+            security: 
+                - bearerAuth: []
             operationId: UserLogout
             responses:
                 '200':
-                    description: Ok
+                    description: Success message of user logout
                     content:
                         text/html:
                             schema:
                                 type: string
+                            example:
+                                Refresh token is already deleted
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
             description: "This endpoint allows the user to logout."
             tags:
                 - User
             parameters:
                 -
-                    description: ""
+                    description: "User Id"
                     in: path
                     name: userid
                     required: true
                     schema:
                         type: number
                         format: double
-                -
-                    description: ""
-                    in: header
-                    name: authentication
-                    required: true
-                    schema:
-                        type: string
         get:
             summary: Renew Access Token
             operationId: UserRenewToken
             responses:
                 '200':
-                    description: Ok
+                    description: New Access Token
                     content:
                         text/html:
                             schema:
-                                type: string
+                                type: object
+                                properties: 
+                                    accessToken:
+                                        type: string
+                            example: 
+                                accessToken: 
+                                    e71sdf....
             description: "This endpoint allows the user to renew access token."
             tags:
                 - User
             parameters:
                 -
-                    description: ""
+                    description: "User Id"
                     in: path
                     name: userid
                     required: true
@@ -84,11 +99,13 @@ paths:
             operationId: NewSignup
             responses:
                 '200':
-                    description: Ok
+                    description: Success message for user sign up.
                     content:
                         text/html:
                             schema:
                                 type: string
+                            example:
+                                Sign up is successful
             description: "This endpoint allows the user to sign up."
             tags:
                 - User
@@ -96,131 +113,155 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/signup'
+                            $ref: '#/components/Models/signup'
                 required: true
     /todo:
         post:
             summary: Add a Todo
+            security: 
+                - bearerAuth: []
             operationId: TodoAddTodo
             responses:
                 '200':
-                    description: Ok
+                    description: A todo that is created
                     content:
                         application/json:
                             schema:
-                                type: object
+                                $ref: '#/components/Models/TodoModel'
+                            example:
+                                id:
+                                    1
+                                content:
+                                    Take out trash
+                                date:
+                                    "2020-04-01"
+                                complete:
+                                    "Y"
+                                userId:
+                                    1
+                                creationDate:
+                                    "Created Date..."
+                                updatedOn:
+                                    "Updated Date..."
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
             description: "This endpoint allows the user to add a todo."
             tags:
                 - Todo
-            parameters:
-                -
-                    description: ""
-                    in: header
-                    name: authentication
-                    required: true
-                    schema:
-                        type: string
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/addtodo'
+                            $ref: '#/components/Models/addtodo'
                 required: true
         put:
             summary: Update Complete Status of a Todo
+            security: 
+                - bearerAuth: []
             operationId: TodoUpdateTodo
             responses:
                 '200':
-                    description: Ok
+                    description: A todo that is created
                     content:
-                        text/html:
+                        application/json:
                             schema:
-                                type: string
+                                $ref: '#/components/Models/TodoModel'
+                            example:
+                                id:
+                                    1
+                                content:
+                                    Take out trash
+                                date:
+                                    "2020-04-01"
+                                complete:
+                                    "C"
+                                userId:
+                                    1
+                                creationDate:
+                                    "Created Date..."
+                                updatedOn:
+                                    "Updated Date..."
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
             description: "This endpoint allows the user to update the complete status of a todo."
             tags:
                 - Todo
-            parameters:
-                -
-                    description: ""
-                    in: header
-                    name: authentication
-                    required: true
-                    schema:
-                        type: string
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/updatetodo'
+                            $ref: '#/components/Models/updatetodo'
                 required: true
     '/todo/{date}':
         get:
             summary: Get a list of todos by Date
+            security: 
+                - bearerAuth: []
             operationId: TodoGetTodo
             responses:
                 '200':
-                    description: Ok
+                    description: List of Todos of a date
                     content:
                         application/json:
                             schema:
                                 type: array
                                 items:
-                                    $ref: '#/components/schemas/TodoModel'
+                                    $ref: '#/components/Models/TodoModel'
+                            example:
+                                [todo#1, todo#2...]
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
             description: "This endpoint allows the user to get a list of todos by date."
             tags:
                 - Todo
             parameters:
                 -
-                    description: ""
+                    description: "Date"
                     in: path
                     name: date
-                    required: true
-                    schema:
-                        type: string
-                -
-                    description: ""
-                    in: header
-                    name: authentication
                     required: true
                     schema:
                         type: string
     '/todo/{todoid}':
         delete:
             summary: Delete a todo
+            security: 
+                - bearerAuth: []
             operationId: TodoDeleteTodo
             responses:
                 '200':
-                    description: Ok
+                    description: Success message of deleting todo
                     content:
                         text/html:
                             schema:
                                 type: string
+                            example:
+                                Successfully deleted todo
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
             description: "This endpoint allows the user to delete a todo."
             tags:
                 - Todo
             parameters:
                 -
-                    description: ""
+                    description: "Todo Id"
                     in: path
                     name: todoid
                     required: true
                     schema:
                         type: number
                         format: double
-                -
-                    description: ""
-                    in: header
-                    name: authentication
-                    required: true
-                    schema:
-                        type: string
 components:
     securitySchemes:
         bearerAuth:
-            type: apiKey
-            in: header
-            name: Authorization
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+            name: authentication
             description: 'Enter your access token received after login.'
+    responses:
+        UnauthorizedError:
+            description: Access Token is invalid or missing
     Models:
         login:
             description: ""

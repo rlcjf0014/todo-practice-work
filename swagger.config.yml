@@ -10,8 +10,9 @@ swagger:
   version: 0.0.1
   securityDefinitions:
     bearerAuth:
-      type: apiKey
-      in: header
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
       name: Authorization
       description: Enter your access token received after login.  
 
