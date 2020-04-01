@@ -3,14 +3,20 @@ swagger:
   entryFile: 
     - ./src/controller/*.ts
   outputFormat: OpenApi_3
-  host: localhost:3000
   name: Typescript-rest Todo Application
   description: A Sample application using Typescipt-rest library
   license: MIT
   produces: [application/json]
   version: 0.0.1
   securityDefinitions:
-    default:
+    bearerAuth:
       type: apiKey
       in: header
-      name: authentication
+      name: Authorization
+      description: Enter your access token received after login.  
+
+security:
+    - bearerAuth: []
+
+
+    # "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmlja25hbWUiOiJwaW5ndSIsImVtYWlsIjoiaGlsbEBnbWFpbC5jb20iLCJpYXQiOjE1ODU3MTQ1NzMsImV4cCI6MTU5NDM1NDU3M30.s6cR3CxmXiAdQsD0s7i0wXjHJKupLFZRaNM_7Xe_A9A"

@@ -17,7 +17,7 @@ export class ApiServer {
         this.config();
 
         Server.loadServices(this.app, "controller/*", __dirname);
-        Server.swagger(this.app, { filePath: "./dist/swagger.json" });
+        Server.swagger(this.app, { filePath: "./swagger.yaml" });
     }
 
     /**
@@ -62,4 +62,6 @@ export class ApiServer {
         this.app.use(cors());
         this.app.use(morgan("combined"));
     }
+
+    
 }

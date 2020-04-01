@@ -1,0 +1,325 @@
+openapi: 3.0.0
+info:
+    description: 'A Sample application using Typescipt-rest library'
+    license:
+        name: MIT
+    title: 'Typescript-rest Todo Application'
+    version: 0.0.1
+paths:
+    /user:
+        post:
+            summary: User Login
+            operationId: UserLogin
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+            description: "This endpoint allows the user to login."
+            tags:
+                - User
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/login'
+                required: true
+    '/user/{userid}':
+        delete:
+            summary: User Logout
+            operationId: UserLogout
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        text/html:
+                            schema:
+                                type: string
+            description: "This endpoint allows the user to logout."
+            tags:
+                - User
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: userid
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+                -
+                    description: ""
+                    in: header
+                    name: authentication
+                    required: true
+                    schema:
+                        type: string
+        get:
+            summary: Renew Access Token
+            operationId: UserRenewToken
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        text/html:
+                            schema:
+                                type: string
+            description: "This endpoint allows the user to renew access token."
+            tags:
+                - User
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: userid
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+    /new:
+        post:
+            summary: User Sign Up
+            operationId: NewSignup
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        text/html:
+                            schema:
+                                type: string
+            description: "This endpoint allows the user to sign up."
+            tags:
+                - User
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/signup'
+                required: true
+    /todo:
+        post:
+            summary: Add a Todo
+            operationId: TodoAddTodo
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+            description: "This endpoint allows the user to add a todo."
+            tags:
+                - Todo
+            parameters:
+                -
+                    description: ""
+                    in: header
+                    name: authentication
+                    required: true
+                    schema:
+                        type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/addtodo'
+                required: true
+        put:
+            summary: Update Complete Status of a Todo
+            operationId: TodoUpdateTodo
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        text/html:
+                            schema:
+                                type: string
+            description: "This endpoint allows the user to update the complete status of a todo."
+            tags:
+                - Todo
+            parameters:
+                -
+                    description: ""
+                    in: header
+                    name: authentication
+                    required: true
+                    schema:
+                        type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/updatetodo'
+                required: true
+    '/todo/{date}':
+        get:
+            summary: Get a list of todos by Date
+            operationId: TodoGetTodo
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/TodoModel'
+            description: "This endpoint allows the user to get a list of todos by date."
+            tags:
+                - Todo
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: date
+                    required: true
+                    schema:
+                        type: string
+                -
+                    description: ""
+                    in: header
+                    name: authentication
+                    required: true
+                    schema:
+                        type: string
+    '/todo/{todoid}':
+        delete:
+            summary: Delete a todo
+            operationId: TodoDeleteTodo
+            responses:
+                '200':
+                    description: Ok
+                    content:
+                        text/html:
+                            schema:
+                                type: string
+            description: "This endpoint allows the user to delete a todo."
+            tags:
+                - Todo
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: todoid
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+                -
+                    description: ""
+                    in: header
+                    name: authentication
+                    required: true
+                    schema:
+                        type: string
+components:
+    securitySchemes:
+        bearerAuth:
+            type: apiKey
+            in: header
+            name: Authorization
+            description: 'Enter your access token received after login.'
+    Models:
+        login:
+            description: ""
+            properties:
+                email:
+                    type: string
+                    description: ""
+                password:
+                    type: string
+                    description: ""
+            type: object
+            required:
+                - email
+                - password
+        signup:
+            description: ""
+            properties:
+                email:
+                    type: string
+                    description: ""
+                nickname:
+                    type: string
+                    description: ""
+                password:
+                    type: string
+                    description: ""
+            type: object
+            required:
+                - email
+                - nickname
+                - password
+        addtodo:
+            description: ""
+            properties:
+                content:
+                    type: string
+                    description: ""
+                date:
+                    type: string
+                    description: ""
+                complete:
+                    type: string
+                    description: ""
+            type: object
+            required:
+                - content
+                - date
+                - complete
+        updatetodo:
+            description: ""
+            properties:
+                id:
+                    type: number
+                    format: double
+                    description: ""
+                complete:
+                    enum:
+                        - C
+                        - Y
+                    type: string
+                    description: ""
+            type: object
+            required:
+                - id
+                - complete
+        TodoModel:
+            description: ""
+            properties:
+                id:
+                    type: number
+                    format: double
+                    description: ""
+                content:
+                    type: string
+                    description: ""
+                date:
+                    type: string
+                    description: ""
+                complete:
+                    type: string
+                    description: ""
+                userId:
+                    type: number
+                    format: double
+                    description: ""
+                creationDate:
+                    type: string
+                    format: date-time
+                    description: ""
+                updatedOn:
+                    type: string
+                    format: date-time
+                    description: ""
+            type: object
+            required:
+                - id
+                - content
+                - date
+                - complete
+                - userId
+                - creationDate
+                - updatedOn

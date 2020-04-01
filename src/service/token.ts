@@ -16,15 +16,15 @@ export class token {
     }
 
     public getUserIdbyAccessToken(authorization:string|undefined):number {
-      
-        const decode:any = jwt.verify(authorization, this.accessKey);
+        const process:string = authorization.split(" ")[1];
+        const decode:any = jwt.verify(process, this.accessKey);
         const userId = decode.id;
         return userId;
       
     }
 
     public getUserIdbyRefreshToken(refreshToken:string):number {
-     
+        
         const decode:any = jwt.verify(refreshToken, this.refreshKey);
         const userId = decode.id;
         return userId;
@@ -41,15 +41,15 @@ export class token {
     }
 
     public checkRefreshToken(refreshToken:string):boolean {
-      
+        
         jwt.verify(refreshToken, this.refreshKey);
         return true;
       
     }
 
     public checkAccessToken(accessToken:string):boolean {
-      
-        jwt.verify(accessToken, this.accessKey);
+        const process:string = accessToken.split(" ")[1];
+        jwt.verify(process, this.accessKey);
         return true;
      
     }
