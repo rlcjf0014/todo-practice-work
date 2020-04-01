@@ -34,8 +34,8 @@ export class UserController {
 
     @Path(":userid")
     @DELETE
-    public async logout(@PathParam("userid") userid: number, @HeaderParam("authentication") authentication:string): Promise<string> {
-      await this.tokenService.checkAccessToken(authentication);
+    public async logout(@PathParam("userid") userid: number, @HeaderParam("Authorization") Authorization:string): Promise<string> {
+      await this.tokenService.checkAccessToken(Authorization);
       return await this.deleteService.deletetoken(userid);
     }
 
