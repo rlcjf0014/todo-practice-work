@@ -53,7 +53,7 @@ paths:
                                 Refresh token is already deleted
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
-            description: "This endpoint allows the user to logout."
+            description: "This endpoint allows the user to logout. Need to have access token in header."
             tags:
                 - User
             parameters:
@@ -145,7 +145,7 @@ paths:
                                     "Updated Date..."
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
-            description: "This endpoint allows the user to add a todo."
+            description: "This endpoint allows the user to add a todo. Need to have access token in header."
             tags:
                 - Todo
             requestBody:
@@ -183,7 +183,7 @@ paths:
                                     "Updated Date..."
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
-            description: "This endpoint allows the user to update the complete status of a todo."
+            description: "This endpoint allows the user to update the complete status of a todo. Need to have access token in header."
             tags:
                 - Todo
             requestBody:
@@ -211,7 +211,7 @@ paths:
                                 [todo#1, todo#2...]
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
-            description: "This endpoint allows the user to get a list of todos by date."
+            description: "This endpoint allows the user to get a list of todos by date. Need to have access token in header."
             tags:
                 - Todo
             parameters:
@@ -239,7 +239,7 @@ paths:
                                 Successfully deleted todo
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
-            description: "This endpoint allows the user to delete a todo."
+            description: "This endpoint allows the user to delete a todo. Need to have access token in header."
             tags:
                 - Todo
             parameters:
