@@ -23,6 +23,10 @@ paths:
                             example: 
                                 accessToken: 
                                     e71sdf....
+                '401':
+                    description: Incorrect Password or Invalid email
+                '500':
+                    description: Internal Server Error. See error message for detail.     
             description: "This endpoint allows the user to login."
             tags:
                 - User
@@ -50,9 +54,13 @@ paths:
                             schema:
                                 type: string
                             example:
-                                Refresh token is already deleted
+                                Refresh token is successfully deleted.
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
+                '404':
+                    description: User not found. 
+                '500':
+                    description: Internal Server Error
             description: "This endpoint allows the user to logout. Need to have access token in header."
             tags:
                 - User
@@ -81,6 +89,10 @@ paths:
                             example: 
                                 accessToken: 
                                     e71sdf....
+                '404':
+                    description: User not found.
+                '500':
+                    description: Internal Server Error. See error message for detail.
             description: "This endpoint allows the user to renew access token."
             tags:
                 - User

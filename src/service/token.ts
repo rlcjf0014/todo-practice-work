@@ -1,6 +1,7 @@
 import * as jwt from "jsonwebtoken";
 // import { Errors } from 'typescript-rest';
 import { User } from "../models/User";
+// import { Errors } from "typescript-rest";
 
 require("dotenv").config();
 

@@ -42,7 +42,7 @@ export class UserController {
 
     @Path(":userid")
     @GET
-    public async renewToken(@PathParam("userid") userid: number): Promise<string> {
+    public async renewToken(@PathParam("userid") userid: number): Promise<object> {
       return await this.renewService.renewToken(userid);
     }
 }

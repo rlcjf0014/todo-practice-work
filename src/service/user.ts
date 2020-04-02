@@ -77,7 +77,8 @@ export class deletetoken {
         if (res[0] === 1){
           return "Refresh token is successfully deleted";
         }
-        throw new Errors.ConflictError("Refresh token is already deleted");
+        throw new Errors.NotFoundError("User not found");
+        // throw new Errors.ConflictError("Query Failed Error");
       });
   }
 }
@@ -86,12 +87,19 @@ export class renewAccess {
     @Inject
     private tokenService:token;
 
-    public async renewToken(userid: number): Promise<string> {
+    public async renewToken(userid: number): Promise<object> {
       return await User.findOne({ where: { userid } })
         .then(async (res) => {
+          console.log("값은?", res)
+          if (res === null){
+            throw new Errors.NotFoundError("User not found");
+          }
+          if (res.refreshToken === null){
+            throw new Errors.ConflictError("Refresh token expired. Please login again")
+          }
           await this.tokenService.checkRefreshToken(res.refreshToken);
           const newAccessToken:string = await this.tokenService.generateAccessToken(res);
-          return newAccessToken;
+          return {accessToken: newAccessToken};
         });
     }
 }
