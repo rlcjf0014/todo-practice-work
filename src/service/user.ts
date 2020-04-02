@@ -30,7 +30,7 @@ export class createuser {
           else {
             throw new Errors.ConflictError("User already exists");
           }
-        });
+        })
     }
 }
 
@@ -89,14 +89,9 @@ export class renewAccess {
     public async renewToken(userid: number): Promise<string> {
       return await User.findOne({ where: { userid } })
         .then(async (res) => {
-          const result:boolean = await this.tokenService.checkRefreshToken(res.refreshToken);
-          if (result) {
-            const newAccessToken:string = await this.tokenService.generateAccessToken(res);
-            return newAccessToken;
-          }
-          else{
-            throw new Errors.ForbiddenError("Refresh Token has expired");
-          }
+          await this.tokenService.checkRefreshToken(res.refreshToken);
+          const newAccessToken:string = await this.tokenService.generateAccessToken(res);
+          return newAccessToken;
         });
     }
 }

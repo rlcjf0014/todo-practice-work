@@ -40,17 +40,12 @@ export class token {
       
     }
 
-    public checkRefreshToken(refreshToken:string):boolean {
-        
+    public checkRefreshToken(refreshToken:string):void {
         jwt.verify(refreshToken, this.refreshKey);
-        return true;
-      
     }
 
-    public checkAccessToken(accessToken:string):boolean {
+    public checkAccessToken(accessToken:string):void {
         const process:string = accessToken.split(" ")[1];
         jwt.verify(process, this.accessKey);
-        return true;
-     
     }
 }
