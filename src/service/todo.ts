@@ -8,27 +8,32 @@ export class todo {
     return await Todo.create({
       content: newinfo.content, date: newinfo.date, userId, complete: newinfo.complete,
     })
-      .then((res) => res)
-      .catch((error) => {
-        throw new Errors.InternalServerError(error);
-      });
+      .then((res) => {
+        if (res === null){
+          throw new Errors.ConflictError("Query Failed Error");
+        }
+        return res;
+        });
   }
 
   public async updateService(updateinfo:updatetodo, userId:number):Promise<TodoModel> {
     return await Todo.findOne({ where: { id: updateinfo.id, userId } })
       .then((todo) => {
+        if (todo === null) {
+          throw new Errors.NotFoundError("User not found");
+        }
           todo.complete = updateinfo.complete;
           return todo.save();
-      }).catch((error) => {
-        throw new Errors.NotFoundError(error);
       });
   }
 
   public async getService(userId:number, date:string):Promise<Array<TodoModel>> {
     return await Todo.findAll({ where: { userId, date } })
-      .then((res) => res)
-      .catch((error) => {
-        throw new Errors.NotFoundError(error);
+      .then((res) => {
+        if (res === null){
+          throw new Errors.NotFoundError("Date not found");
+        }
+        return res
       });
   }
 
@@ -39,7 +44,7 @@ export class todo {
         return "Successfully deleted todo";
       }
       else {
-        throw new Errors.ConflictError("No todo with that id");
+        throw new Errors.NotFoundError("No todo found");
       }
       });
   }
