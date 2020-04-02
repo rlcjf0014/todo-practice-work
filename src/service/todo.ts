@@ -20,7 +20,6 @@ export class todo {
           todo.complete = updateinfo.complete;
           return todo.save();
       }).catch((error) => {
-        //! 에러처리
         throw new Errors.NotFoundError(error);
       });
   }

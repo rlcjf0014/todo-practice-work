@@ -105,7 +105,11 @@ paths:
                             schema:
                                 type: string
                             example:
-                                Sign up is successful
+                                Sign up is successful 
+                '409':
+                    description: Fail message of already existing user.
+                '500':
+                    description: Internal Server Error. See error message for detail.          
             description: "This endpoint allows the user to sign up."
             tags:
                 - User
