@@ -141,7 +141,7 @@ paths:
             operationId: TodoAddTodo
             responses:
                 '200':
-                    description: A todo that is created
+                    description: Created todo. 
                     content:
                         application/json:
                             schema:
@@ -183,7 +183,7 @@ paths:
             operationId: TodoUpdateTodo
             responses:
                 '200':
-                    description: A todo that is created
+                    description: Created todo.
                     content:
                         application/json:
                             schema:
@@ -206,7 +206,7 @@ paths:
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
                 '404':
-                    description: User not found.
+                    description: Todo not found.
                 '500':
                     description: Internal Server Error. See error message for detail. 
             description: "This endpoint allows the user to update the complete status of a todo. Need to have access token in header."
@@ -220,7 +220,7 @@ paths:
                 required: true
     '/todo/{date}':
         get:
-            summary: Get a list of todos by Date
+            summary: Get a list of todos by Date.
             security: 
                 - bearerAuth: []
             operationId: TodoGetTodo
@@ -295,7 +295,7 @@ components:
             description: 'Enter your access token received after login.'
     responses:
         UnauthorizedError:
-            description: Access Token is invalid or missing
+            description: JWT token error. See error message for detail.
     Models:
         login:
             description: ""

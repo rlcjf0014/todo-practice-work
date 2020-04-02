@@ -33,7 +33,7 @@ export class todo {
         if (res === null){
           throw new Errors.NotFoundError("Date not found");
         }
-        return res
+        return res;
       });
   }
 

@@ -26,7 +26,7 @@ export class ApiServer {
               }
               res.set("Content-Type", "application/json")
               res.status(err.statusCode)
-              res.json({error : err.message, code: err.statusCode});
+              return res.json({error : err.message, code: err.statusCode});
             } 
             if (err instanceof JsonWebTokenError || err instanceof TokenExpiredError){
                 if (res.headersSent) { // important to allow default error handler to close connection if headers already sent
@@ -34,12 +34,12 @@ export class ApiServer {
                 }
                 res.set("Content-Type", "application/json")
                 res.status(401)
-                res.json({error : err.message, code: 401});
+                return res.json({error : err.message, code: 401});
             } 
             else {
                 res.set("Content-Type", "application/json")
                 res.status(500)
-                res.json({error : err.message, code: 500});
+                return res.json({error : err.message, code: 500});
             }
           });
     }
