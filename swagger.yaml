@@ -57,8 +57,6 @@ paths:
                                 Refresh token is successfully deleted.
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
-                '409':
-                    description: Conflict Error. Query Failed Error.
                 '404':
                     description: User not found. 
                 '500':
@@ -91,6 +89,10 @@ paths:
                             example: 
                                 accessToken: 
                                     e71sdf....
+                '404':
+                    description: User not found.
+                '500':
+                    description: Internal Server Error. See error message for detail.
             description: "This endpoint allows the user to renew access token."
             tags:
                 - User
