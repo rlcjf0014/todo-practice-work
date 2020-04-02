@@ -54,9 +54,15 @@ paths:
                             schema:
                                 type: string
                             example:
-                                Refresh token is already deleted
+                                Refresh token is successfully deleted.
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
+                '409':
+                    description: Conflict Error. Query Failed Error.
+                '404':
+                    description: User not found. 
+                '500':
+                    description: Internal Server Error
             description: "This endpoint allows the user to logout. Need to have access token in header."
             tags:
                 - User

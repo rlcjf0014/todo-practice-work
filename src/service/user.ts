@@ -77,8 +77,10 @@ export class deletetoken {
         if (res[0] === 1){
           return "Refresh token is successfully deleted";
         }
-        throw new Errors.ConflictError("Refresh token is already deleted");
-      });
+        throw new Errors.ConflictError("Query Failed Error");
+      }).catch(() => {
+        throw new Errors.NotFoundError("User not found");
+      })
   }
 }
 
