@@ -1,5 +1,5 @@
 import {testdb} from "../dbtest";
-import {ApiServer} from "../api-server";
+import {ApiServer} from "./testServer";
 import * as request from "request";
 import * as jwt from "jsonwebtoken";
 import { Server, HttpMethod } from "typescript-rest";
