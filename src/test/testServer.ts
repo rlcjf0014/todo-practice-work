@@ -17,8 +17,8 @@ export class ApiServer {
         this.app = express();
         this.config();
 
-        Server.loadServices(this.app, "controller/*", __dirname);
-        Server.swagger(this.app, { filePath: "./swagger.yaml" });
+        Server.loadServices(this.app, "../controller/*", __dirname);
+        // Server.swagger(this.app, { filePath: "./swagger.yaml" });
         this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
             if (err instanceof Errors.ConflictError || err instanceof Errors.InternalServerError || err instanceof Errors.UnauthorizedError || err instanceof Errors.NotFoundError){
               if (res.headersSent) { // important to allow default error handler to close connection if headers already sent

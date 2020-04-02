@@ -1,5 +1,5 @@
 import {testdb} from "../dbtest";
-import {ApiServer} from "../api-server";
+import {ApiServer} from "./testServer";
 import * as request from "request";
 // import request from "supertest";
 

@@ -91,6 +91,8 @@ paths:
                                     e71sdf....
                 '404':
                     description: User not found.
+                '409':
+                    description: Refresh Token expired.     
                 '500':
                     description: Internal Server Error. See error message for detail.
             description: "This endpoint allows the user to renew access token."
@@ -139,7 +141,7 @@ paths:
             operationId: TodoAddTodo
             responses:
                 '200':
-                    description: A todo that is created
+                    description: Created todo. 
                     content:
                         application/json:
                             schema:
@@ -161,6 +163,10 @@ paths:
                                     "Updated Date..."
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
+                '409':
+                    description: Query Failed Error. 
+                '500':
+                    description: Internal Server Error. See error message for detail.
             description: "This endpoint allows the user to add a todo. Need to have access token in header."
             tags:
                 - Todo
@@ -177,7 +183,7 @@ paths:
             operationId: TodoUpdateTodo
             responses:
                 '200':
-                    description: A todo that is created
+                    description: Created todo.
                     content:
                         application/json:
                             schema:
@@ -199,6 +205,10 @@ paths:
                                     "Updated Date..."
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
+                '404':
+                    description: Todo not found.
+                '500':
+                    description: Internal Server Error. See error message for detail. 
             description: "This endpoint allows the user to update the complete status of a todo. Need to have access token in header."
             tags:
                 - Todo
@@ -210,7 +220,7 @@ paths:
                 required: true
     '/todo/{date}':
         get:
-            summary: Get a list of todos by Date
+            summary: Get a list of todos by Date.
             security: 
                 - bearerAuth: []
             operationId: TodoGetTodo
@@ -227,6 +237,10 @@ paths:
                                 [todo#1, todo#2...]
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
+                '404':
+                    description: Date not found.
+                '500':
+                    description: Internal Server Error. See error message for detail. 
             description: "This endpoint allows the user to get a list of todos by date. Need to have access token in header."
             tags:
                 - Todo
@@ -255,6 +269,10 @@ paths:
                                 Successfully deleted todo
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
+                '404':
+                    description: No todo found.
+                '500':
+                    description: Internal Server Error. See error message for detail. 
             description: "This endpoint allows the user to delete a todo. Need to have access token in header."
             tags:
                 - Todo
@@ -277,7 +295,7 @@ components:
             description: 'Enter your access token received after login.'
     responses:
         UnauthorizedError:
-            description: Access Token is invalid or missing
+            description: JWT token error. See error message for detail.
     Models:
         login:
             description: ""
