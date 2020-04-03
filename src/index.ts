@@ -1,7 +1,8 @@
-import {start} from './server';
+/* eslint-disable no-console */
+import start from "./server";
 
 start()
     .catch((err) => {
         console.error(`Error starting server: ${err.message}`);
-        process.exit(-1)
-    }) 
+        process.exit(-1);
+    });

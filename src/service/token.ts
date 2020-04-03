@@ -5,15 +5,13 @@ import { User } from "../models/User";
 
 require("dotenv").config();
 
-export class token {
+export default class token {
     private refreshKey:any = process.env.JWT_SECRET_REFRESH;
 
     private accessKey:any = process.env.JWT_SECRET_ACCESS;
 
     public generateRefreshToken(id:number):string {
-      
         return jwt.sign({ id }, this.refreshKey, { expiresIn: "90d" });
-     
     }
 
     public getUserIdbyAccessToken(authorization:string|undefined):number {
@@ -21,16 +19,14 @@ export class token {
         const decode:any = jwt.verify(process, this.accessKey);
         const userId = decode.id;
         return userId;
-      
     }
 
     public generateAccessToken(user:User):string {
         return jwt.sign({
-          id: user.userid,
-          nickname: user.nickname,
-          email: user.email,
+            id: user.userid,
+            nickname: user.nickname,
+            email: user.email,
         }, this.accessKey, { expiresIn: "1d" });
-      
     }
 
     public checkRefreshToken(refreshToken:string):void {
