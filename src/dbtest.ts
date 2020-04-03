@@ -1,5 +1,6 @@
-import {Sequelize} from 'sequelize-typescript';
-require("dotenv").config()
+import { Sequelize } from "sequelize-typescript";
+
+require("dotenv").config();
 
 // export const sequelize = new Sequelize({
 //   dialect: 'mariadb',
@@ -9,11 +10,12 @@ require("dotenv").config()
 //   models: [__dirname + '/models']
 // });
 
-export const testdb = new Sequelize({
-  dialect: 'mysql',
-  database: process.env.DB_TEST,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  models: [__dirname + '/models']
+const testdb = new Sequelize({
+    dialect: "mysql",
+    database: process.env.DB_TEST,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    models: [`${__dirname}/models`],
 });
 
+export default testdb;

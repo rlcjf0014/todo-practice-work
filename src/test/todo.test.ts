@@ -1,30 +1,27 @@
-import {testdb} from "../dbtest";
-import {ApiServer} from "./testServer";
 import * as request from "request";
 import * as jwt from "jsonwebtoken";
 import { Server, HttpMethod } from "typescript-rest";
+import { ApiServer } from "./testServer";
+import testdb from "../dbtest";
+
 require("dotenv").config();
 
 const apiServer = new ApiServer();
-const tokenRequest: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
-                = request.defaults({baseUrl: `http://localhost:${apiServer.PORT}`});
-
+const tokenRequest: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl> = request.defaults({ baseUrl: `http://localhost:${apiServer.PORT}` });
 
 
 describe("Todo Controller Tests", () => {
-
-    let accessToken:string; 
+    let accessToken:string;
 
     beforeAll(async () => {
-        await testdb.sync({force: true});
+        await testdb.sync({ force: true });
         await apiServer.start();
         await testdb.query("insert into Users values (default, 'test@gmail.com', 'hipassword', 'pingu', default, default, default, default)");
         accessToken = jwt.sign({
             id: 1,
-            nickname:"testUser",
-            email: "test@gmail.com"
-        }, process.env.JWT_SECRET_ACCESS, { expiresIn: "1d"});
-        return;
+            nickname: "testUser",
+            email: "test@gmail.com",
+        }, process.env.JWT_SECRET_ACCESS, { expiresIn: "1d" });
     });
 
     afterAll(async () => {
@@ -35,7 +32,7 @@ describe("Todo Controller Tests", () => {
     describe("The Rest Server", () => {
         it("should provide a catalog containing the exposed paths", () => {
             expect(Server.getPaths()).toEqual([
-                "/user", "/user/:userid", "/new", "/todo", "/todo/:date", "/todo/:todoid"
+                "/user", "/user/:userid", "/new", "/todo", "/todo/:date", "/todo/:todoid",
             ]);
             expect(Server.getHttpMethods("/new")).toEqual([HttpMethod.POST]);
             expect(Server.getHttpMethods("/user")).toEqual([HttpMethod.POST]);
@@ -44,13 +41,12 @@ describe("Todo Controller Tests", () => {
     });
 
     describe("POST /todo", () => {
-
-        it ("should respond Unauthorized error with invalid access token", done => {
+        it("should respond Unauthorized error with invalid access token", (done) => {
             tokenRequest.post({
-                headers: {Authorization: `bearer invalidtoken`},
-                url: "/todo"
+                headers: { Authorization: "bearer invalidtoken" },
+                url: "/todo",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(401);
                 expect(response.statusMessage).toBe("Unauthorized");
                 // expect(body).toBe("hi");
@@ -59,33 +55,33 @@ describe("Todo Controller Tests", () => {
             });
         });
 
-        it("should respond success message", done => {
+        it("should respond success message", (done) => {
             tokenRequest.post({
-                headers: {Authorization: `bearer ${accessToken}`},
-                body: {content: "take out trash", date: "2020-03-30", complete: "Y"},
+                headers: { Authorization: `bearer ${accessToken}` },
+                body: { content: "take out trash", date: "2020-03-30", complete: "Y" },
                 json: true,
-                url: "/todo"
+                url: "/todo",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(200);
                 expect(typeof body).toBe("object");
-                expect (body).toMatchObject({
+                expect(body).toMatchObject({
                     content: expect.any(String),
                     date: expect.any(String),
-                    complete: expect.any(String)
+                    complete: expect.any(String),
                 });
                 done();
             });
         });
 
-        it ("should respond type error with invalid input information", done => {
+        it("should respond type error with invalid input information", (done) => {
             tokenRequest.post({
-                headers: {Authorization: `bearer ${accessToken}`},
-                body: {date: "2020-03-30", complete: "Y"},
+                headers: { Authorization: `bearer ${accessToken}` },
+                body: { date: "2020-03-30", complete: "Y" },
                 json: true,
-                url: "/todo"
+                url: "/todo",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(500);
                 expect(response.statusMessage).toBe("Internal Server Error");
                 done();
@@ -94,13 +90,12 @@ describe("Todo Controller Tests", () => {
     });
 
     describe("PUT /todo", () => {
-
-        it ("should respond Unauthorized error with invalid access token", done => {
+        it("should respond Unauthorized error with invalid access token", (done) => {
             tokenRequest.put({
-                headers: {Authorization: `bearer invalidtoken`},
-                url: "/todo"
+                headers: { Authorization: "bearer invalidtoken" },
+                url: "/todo",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(401);
                 expect(response.statusMessage).toBe("Unauthorized");
                 // expect(body).toBe("hi");
@@ -109,29 +104,29 @@ describe("Todo Controller Tests", () => {
             });
         });
 
-        it("should respond success message", done => {
+        it("should respond success message", (done) => {
             tokenRequest.put({
-                headers: {Authorization: `bearer ${accessToken}`},
-                body: {id:1, complete: "C"},
+                headers: { Authorization: `bearer ${accessToken}` },
+                body: { id: 1, complete: "C" },
                 json: true,
-                url: "/todo"
+                url: "/todo",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(200);
                 expect(typeof body).toBe("string");
-                expect (body).toBe("Successfully updated todo");
+                expect(body).toBe("Successfully updated todo");
                 done();
             });
         });
 
-        it ("should respond Not Found with invalid todo information", done => {
+        it("should respond Not Found with invalid todo information", (done) => {
             tokenRequest.put({
-                headers: {Authorization: `bearer ${accessToken}`},
-                body: {id:4, complete: "C"},
+                headers: { Authorization: `bearer ${accessToken}` },
+                body: { id: 4, complete: "C" },
                 json: true,
-                url: "/todo"
+                url: "/todo",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(404);
                 expect(response.statusMessage).toBe("Not Found");
                 done();
@@ -140,37 +135,36 @@ describe("Todo Controller Tests", () => {
     });
 
     describe("GET /todo/:date", () => {
-
-        it ("should respond Unauthorized error with invalid access token", done => {
+        it("should respond Unauthorized error with invalid access token", (done) => {
             tokenRequest.get({
-                headers: {Authorization: `bearer invalidtoken`},
-                url: "/todo/2020-03-30"
+                headers: { Authorization: "bearer invalidtoken" },
+                url: "/todo/2020-03-30",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(401);
                 expect(response.statusMessage).toBe("Unauthorized");
                 done();
             });
         });
 
-        it ("should respond empty array with invalid date", done => {
+        it("should respond empty array with invalid date", (done) => {
             tokenRequest.get({
-                headers: {Authorization: `bearer ${accessToken}`},
-                url: "/todo/2020-03-20"
+                headers: { Authorization: `bearer ${accessToken}` },
+                url: "/todo/2020-03-20",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(200);
                 expect(body).toBe("[]");
                 done();
             });
         });
 
-        it ("should respond success message", done => {
+        it("should respond success message", (done) => {
             tokenRequest.get({
-                headers: {Authorization: `bearer ${accessToken}`},
-                url: "/todo/2020-03-30"
+                headers: { Authorization: `bearer ${accessToken}` },
+                url: "/todo/2020-03-30",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(200);
                 expect(typeof JSON.parse(body)).toBe("object");
                 done();
@@ -179,25 +173,24 @@ describe("Todo Controller Tests", () => {
     });
 
     describe("DELETE /todo/:todoid", () => {
-
-        it ("should respond Unauthorized error with invalid access token", done => {
+        it("should respond Unauthorized error with invalid access token", (done) => {
             tokenRequest.delete({
-                headers: {Authorization: `bearer invalidtoken`},
-                url: "/todo/1"
+                headers: { Authorization: "bearer invalidtoken" },
+                url: "/todo/1",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(401);
                 expect(response.statusMessage).toBe("Unauthorized");
                 done();
             });
         });
 
-        it ("should respond Not Found error with invalid todo id", done => {
+        it("should respond Not Found error with invalid todo id", (done) => {
             tokenRequest.delete({
-                headers: {Authorization: `bearer ${accessToken}`},
-                url: "/todo/5"
+                headers: { Authorization: `bearer ${accessToken}` },
+                url: "/todo/5",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(404);
                 expect(response.statusMessage).toBe("Not Found");
                 done();
@@ -205,30 +198,16 @@ describe("Todo Controller Tests", () => {
         });
 
 
-        it ("should respond success message", done => {
+        it("should respond success message", (done) => {
             tokenRequest.delete({
-                headers: {Authorization: `bearer ${accessToken}`},
-                url: "/todo/1"
+                headers: { Authorization: `bearer ${accessToken}` },
+                url: "/todo/1",
             }, (error, response, body) => {
-                if(error) throw error;
+                if (error) throw error;
                 expect(response.statusCode).toBe(200);
                 expect(body).toBe("Successfully deleted todo");
                 done();
             });
         });
     });
-
-
-    
-
-
-
-
-
-
-    });
-
-
-
-
-
+});
