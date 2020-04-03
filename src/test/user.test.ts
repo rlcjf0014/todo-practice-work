@@ -113,13 +113,13 @@ describe("User Controller Tests", () => {
 
     describe("GET /user/:userid", () => {
 
-        it ("should respond error with invalid user", done => {
+        it ("should respond Not Found error with invalid user", done => {
             userRequest.get({
                 url: "/user/2"
             }, (error, response, body) => {
                 if(error) throw error;
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe("Internal Server Error");
+                expect(response.statusCode).toBe(404);
+                expect(response.statusMessage).toBe("Not Found");
                 //! 에러처리 전체적으로 세부화
                 done();
             });
@@ -137,50 +137,18 @@ describe("User Controller Tests", () => {
             });
         });
 
-
-        // it ('should respond refresh token already deleted message', done => {
-        //     userRequest.delete({
-        //         headers: {authentication: accessToken},
-        //         url: '/user/1'
-        //     }, (error, response, body) => {
-        //         if(error) throw error
-        //         expect(response.statusCode).toBe(409);
-        //         expect(response.statusMessage).toBe('Conflict');
-        //         done();
-        //     })
-        // });
     });
 
     describe("DELETE /user/:userid", () => {
 
-        // it ('should respond JWT token error with expired access token', done => {
-        //     expiredAccess = jwt.sign({
-        //         id: 1,
-        //         nickname: 'testUser',
-        //         email: 'test@gmail.com'
-        //     }, process.env.JWT_SECRET_ACCESS, { expiresIn: '0.1s'}); 
-
-        //     userRequest.delete({
-        //         headers: {authentication: expiredAccess},
-        //         url: '/user/1'
-        //     }, (error, response, body) => {
-        //         if(error) throw error
-        //         expect(response.statusCode).toBe(500);
-        //         expect(response.statusMessage).toBe('Internal Server Error');
-        //         // expect(body).toBe("hi");
-        //         //! 에러처리 전체적으로 세부화
-        //         done();
-        //     })
-        // });
-
-        it ("should respond JWT token error with invalid access token", done => {
+        it ("should respond Unauthorized error with invalid access token", done => {
             userRequest.delete({
-                headers: {authentication: "randomtoken"},
+                headers: {Authorization: `bearer invalidtoken`},
                 url: "/user/1"
             }, (error, response, body) => {
                 if(error) throw error;
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe("Internal Server Error");
+                expect(response.statusCode).toBe(401);
+                expect(response.statusMessage).toBe("Unauthorized");
                 // expect(body).toBe("hi");
                 //! 에러처리 전체적으로 세부화
                 done();
@@ -189,7 +157,7 @@ describe("User Controller Tests", () => {
 
         it ("should respond success message", done => {
             userRequest.delete({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 url: "/user/1"
             }, (error, response, body) => {
                 if(error) throw error;
@@ -200,17 +168,30 @@ describe("User Controller Tests", () => {
         });
 
 
-        it ("should respond refresh token already deleted message", done => {
+        it ("should respond Not Found error message", done => {
             userRequest.delete({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
+                url: "/user/2"
+            }, (error, response, body) => {
+                if(error) throw error;
+                expect(response.statusCode).toBe(404);
+                expect(response.statusMessage).toBe("Not Found");
+                done();
+            });
+        });
+
+        it ("should respond conflict message when refresh token is invalid", done => {
+            userRequest.get({
                 url: "/user/1"
             }, (error, response, body) => {
                 if(error) throw error;
                 expect(response.statusCode).toBe(409);
                 expect(response.statusMessage).toBe("Conflict");
+                //* 토큰
                 done();
             });
         });
+
     });
 
 

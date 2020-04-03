@@ -9,9 +9,6 @@ export class todo {
       content: newinfo.content, date: newinfo.date, userId, complete: newinfo.complete,
     })
       .then((res) => {
-        if (res === null){
-          throw new Errors.ConflictError("Query Failed Error");
-        }
         return res;
         });
   }
@@ -30,9 +27,6 @@ export class todo {
   public async getService(userId:number, date:string):Promise<Array<TodoModel>> {
     return await Todo.findAll({ where: { userId, date } })
       .then((res) => {
-        if (res === null){
-          throw new Errors.NotFoundError("Date not found");
-        }
         return res;
       });
   }
