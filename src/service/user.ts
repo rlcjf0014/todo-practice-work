@@ -52,9 +52,6 @@ export class checkuser {
               const newRefreshToken:string = await this.tokenService.generateRefreshToken(res.userid);
               return await User.update({ refreshToken: newRefreshToken }, { where: { email: userinfo.email } })
                 .then(() => {return {accessToken: newAccessToken};})
-                .catch((e) => {
-                  throw new Errors.ConflictError(e);
-                });
             }
             else{
               throw new Errors.UnauthorizedError("Incorrect Password");
@@ -94,7 +91,7 @@ export class renewAccess {
             throw new Errors.NotFoundError("User not found");
           }
           if (res.refreshToken === null){
-            throw new Errors.ConflictError("Refresh token expired. Please login again");
+            throw new Errors.ConflictError("Refresh token invalid. Please login again");
           }
           await this.tokenService.checkRefreshToken(res.refreshToken);
           const newAccessToken:string = await this.tokenService.generateAccessToken(res);

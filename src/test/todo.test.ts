@@ -45,14 +45,14 @@ describe("Todo Controller Tests", () => {
 
     describe("POST /todo", () => {
 
-        it ("should respond JWT token error with invalid access token", done => {
+        it ("should respond Unauthorized error with invalid access token", done => {
             tokenRequest.post({
-                headers: {authentication: "randomtoken"},
+                headers: {Authorization: `bearer invalidtoken`},
                 url: "/todo"
             }, (error, response, body) => {
                 if(error) throw error;
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe("Internal Server Error");
+                expect(response.statusCode).toBe(401);
+                expect(response.statusMessage).toBe("Unauthorized");
                 // expect(body).toBe("hi");
                 //! 에러처리 전체적으로 세부화
                 done();
@@ -61,7 +61,7 @@ describe("Todo Controller Tests", () => {
 
         it("should respond success message", done => {
             tokenRequest.post({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 body: {content: "take out trash", date: "2020-03-30", complete: "Y"},
                 json: true,
                 url: "/todo"
@@ -80,7 +80,7 @@ describe("Todo Controller Tests", () => {
 
         it ("should respond type error with invalid input information", done => {
             tokenRequest.post({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 body: {date: "2020-03-30", complete: "Y"},
                 json: true,
                 url: "/todo"
@@ -95,14 +95,14 @@ describe("Todo Controller Tests", () => {
 
     describe("PUT /todo", () => {
 
-        it ("should respond JWT token error with invalid access token", done => {
+        it ("should respond Unauthorized error with invalid access token", done => {
             tokenRequest.put({
-                headers: {authentication: "randomtoken"},
+                headers: {Authorization: `bearer invalidtoken`},
                 url: "/todo"
             }, (error, response, body) => {
                 if(error) throw error;
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe("Internal Server Error");
+                expect(response.statusCode).toBe(401);
+                expect(response.statusMessage).toBe("Unauthorized");
                 // expect(body).toBe("hi");
                 //! 에러처리 전체적으로 세부화
                 done();
@@ -111,7 +111,7 @@ describe("Todo Controller Tests", () => {
 
         it("should respond success message", done => {
             tokenRequest.put({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 body: {id:1, complete: "C"},
                 json: true,
                 url: "/todo"
@@ -126,7 +126,7 @@ describe("Todo Controller Tests", () => {
 
         it ("should respond Not Found with invalid todo information", done => {
             tokenRequest.put({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 body: {id:4, complete: "C"},
                 json: true,
                 url: "/todo"
@@ -141,21 +141,21 @@ describe("Todo Controller Tests", () => {
 
     describe("GET /todo/:date", () => {
 
-        it ("should respond error with invalid access token", done => {
+        it ("should respond Unauthorized error with invalid access token", done => {
             tokenRequest.get({
-                headers: {authentication: "wrongtokendata"},
+                headers: {Authorization: `bearer invalidtoken`},
                 url: "/todo/2020-03-30"
             }, (error, response, body) => {
                 if(error) throw error;
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe("Internal Server Error");
+                expect(response.statusCode).toBe(401);
+                expect(response.statusMessage).toBe("Unauthorized");
                 done();
             });
         });
 
-        it ("should respond error with invalid date", done => {
+        it ("should respond empty array with invalid date", done => {
             tokenRequest.get({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 url: "/todo/2020-03-20"
             }, (error, response, body) => {
                 if(error) throw error;
@@ -167,7 +167,7 @@ describe("Todo Controller Tests", () => {
 
         it ("should respond success message", done => {
             tokenRequest.get({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 url: "/todo/2020-03-30"
             }, (error, response, body) => {
                 if(error) throw error;
@@ -180,26 +180,26 @@ describe("Todo Controller Tests", () => {
 
     describe("DELETE /todo/:todoid", () => {
 
-        it ("should respond error with invalid access token", done => {
+        it ("should respond Unauthorized error with invalid access token", done => {
             tokenRequest.delete({
-                headers: {authentication: "wrongtokendata"},
+                headers: {Authorization: `bearer invalidtoken`},
                 url: "/todo/1"
             }, (error, response, body) => {
                 if(error) throw error;
-                expect(response.statusCode).toBe(500);
-                expect(response.statusMessage).toBe("Internal Server Error");
+                expect(response.statusCode).toBe(401);
+                expect(response.statusMessage).toBe("Unauthorized");
                 done();
             });
         });
 
-        it ("should respond error with invalid todo id", done => {
+        it ("should respond Not Found error with invalid todo id", done => {
             tokenRequest.delete({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 url: "/todo/5"
             }, (error, response, body) => {
                 if(error) throw error;
-                expect(response.statusCode).toBe(409);
-                expect(response.statusMessage).toBe("Conflict");
+                expect(response.statusCode).toBe(404);
+                expect(response.statusMessage).toBe("Not Found");
                 done();
             });
         });
@@ -207,7 +207,7 @@ describe("Todo Controller Tests", () => {
 
         it ("should respond success message", done => {
             tokenRequest.delete({
-                headers: {authentication: accessToken},
+                headers: {Authorization: `bearer ${accessToken}`},
                 url: "/todo/1"
             }, (error, response, body) => {
                 if(error) throw error;

@@ -92,7 +92,7 @@ paths:
                 '404':
                     description: User not found.
                 '409':
-                    description: Refresh Token expired.     
+                    description: Refresh Token invalid.     
                 '500':
                     description: Internal Server Error. See error message for detail.
             description: "This endpoint allows the user to renew access token."
@@ -163,8 +163,6 @@ paths:
                                     "Updated Date..."
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
-                '409':
-                    description: Query Failed Error. 
                 '500':
                     description: Internal Server Error. See error message for detail.
             description: "This endpoint allows the user to add a todo. Need to have access token in header."
@@ -237,8 +235,6 @@ paths:
                                 [todo#1, todo#2...]
                 '401':
                     $ref: '#/components/responses/UnauthorizedError'
-                '404':
-                    description: Date not found.
                 '500':
                     description: Internal Server Error. See error message for detail. 
             description: "This endpoint allows the user to get a list of todos by date. Need to have access token in header."

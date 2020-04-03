@@ -24,14 +24,6 @@ export class token {
       
     }
 
-    public getUserIdbyRefreshToken(refreshToken:string):number {
-        
-        const decode:any = jwt.verify(refreshToken, this.refreshKey);
-        const userId = decode.id;
-        return userId;
-     
-    }
-
     public generateAccessToken(user:User):string {
         return jwt.sign({
           id: user.userid,
