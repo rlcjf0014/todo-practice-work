@@ -1,12 +1,14 @@
+/* eslint-disable max-len */
+/* eslint-disable class-methods-use-this */
 import { Inject } from "typescript-ioc";
 import { Errors } from "typescript-rest";
-import { InvalidConnectionError } from "sequelize/types";
 import { User } from "../models/User";
 import { signup, login } from "../types/interface";
-import { createSalt } from "./crypto";
-import { token } from "./token";
+import createSalt from "./crypto";
+import token from "./token";
 
-export default class createuser {
+
+export default class user {
     @Inject
     private pwService:createSalt;
 
@@ -14,7 +16,7 @@ export default class createuser {
         const salt:string = await this.pwService.getRandomByte();
         const secretpw:string = await this.pwService.getEncryPw(newinfo.password, salt);
 
-        return await User
+        return User
             .findOrCreate({
                 where: { email: newinfo.email },
                 defaults: {
@@ -32,17 +34,13 @@ export default class createuser {
                 throw new Errors.ConflictError("User already exists");
             });
     }
-}
 
-export class checkuser {
-    @Inject
-    private pwService:createSalt;
 
     @Inject
     private tokenService:token;
 
     public async checkuser(userinfo:login):Promise<object> {
-        return await User
+        return User
             .findOne({ where: { email: userinfo.email } })
             .then(async (res) => {
                 if (res) {
@@ -50,7 +48,7 @@ export class checkuser {
                     if (secretpw === res.password) {
                         const newAccessToken:string = this.tokenService.generateAccessToken(res);
                         const newRefreshToken:string = this.tokenService.generateRefreshToken(res.userid);
-                        return await User.update({ refreshToken: newRefreshToken }, { where: { email: userinfo.email } })
+                        return User.update({ refreshToken: newRefreshToken }, { where: { email: userinfo.email } })
                             .then(() => ({ accessToken: newAccessToken }));
                     }
 
@@ -60,11 +58,9 @@ export class checkuser {
                 }
             });
     }
-}
 
-export class deletetoken {
     public async deletetoken(userid: number): Promise<string> {
-        return await User
+        return User
             .update({
                 refreshToken: null,
             }, { where: { userid } })
@@ -76,14 +72,9 @@ export class deletetoken {
                 // throw new Errors.ConflictError("Query Failed Error");
             });
     }
-}
-
-export class renewAccess {
-    @Inject
-    private tokenService:token;
 
     public async renewToken(userid: number): Promise<object> {
-        return await User.findOne({ where: { userid } })
+        return User.findOne({ where: { userid } })
             .then(async (res) => {
                 if (res === null) {
                     throw new Errors.NotFoundError("User not found");

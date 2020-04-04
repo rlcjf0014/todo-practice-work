@@ -67,6 +67,7 @@ export default class ApiServer {
      * @returns {Promise<boolean>}
      */
     public async stop(): Promise<boolean> {
+        // eslint-disable-next-line consistent-return
         return new Promise<boolean>((resolve) => {
             if (this.server) {
                 this.server.close(() => resolve(true));
