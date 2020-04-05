@@ -1,7 +1,8 @@
 import {
-    Model, Column, Table, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement, ForeignKey,
+    Model, Column, Table, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement, ForeignKey, DataType,
 } from "sequelize-typescript";
 import { User } from "./User";
+
 
 export interface TodoModel {
     id:number,
@@ -13,6 +14,11 @@ export interface TodoModel {
     updatedOn: Date
 }
 
+enum TodoStatus {
+    Completed = "C",
+    Active = "Y",
+}
+
 @Table
 export class Todo extends Model<Todo> {
     @PrimaryKey
@@ -20,24 +26,24 @@ export class Todo extends Model<Todo> {
     @Column
     id: number;
 
-    @Column({ allowNull: false })
+    @Column({ allowNull: false, type: DataType.STRING })
     content: string;
 
-    @Column({ allowNull: false })
+    @Column({ allowNull: false, type: DataType.STRING })
     date: string;
 
-    @Column({ allowNull: false })
-    complete: string;
+    @Column({ allowNull: false, type: DataType.STRING })
+    complete: TodoStatus;
 
     @ForeignKey(() => User)
-    @Column({ allowNull: false })
+    @Column({ allowNull: false, type: DataType.INTEGER })
     userId!: number;
 
     @CreatedAt
-    @Column
+    @Column(DataType.DATE)
     creationDate: Date;
 
     @UpdatedAt
-    @Column
+    @Column(DataType.DATE)
     updatedOn: Date;
 }
