@@ -1,7 +1,7 @@
 import * as request from "request";
 import * as jwt from "jsonwebtoken";
 import { Server, HttpMethod } from "typescript-rest";
-import { ApiServer } from "./testServer";
+import ApiServer from "./testServer";
 import testdb from "../dbtest";
 
 require("dotenv").config();

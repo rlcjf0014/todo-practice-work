@@ -162,7 +162,7 @@ describe("User Controller Tests", () => {
 
         it("should respond Not Found error message", (done) => {
             userRequest.delete({
-                headers: { Authorization: `bearer ${accessToken}` },
+                headers: { Authorization: `bearer ${accessToken}`},
                 url: "/user/2",
             }, (error, response, body) => {
                 if (error) throw error;
