@@ -3,7 +3,7 @@ import {
 } from "typescript-rest";
 import { Inject } from "typescript-ioc";
 import { Tags } from "typescript-rest-swagger";
-import { checkuser, deletetoken, renewAccess } from "../service/user";
+import user from "../service/user";
 import token from "../service/token";
 import { login } from "../types/interface";
 
@@ -14,17 +14,17 @@ require("dotenv").config();
 @Tags("User")
 export default class UserController {
     @Inject
-    private checkService: checkuser;
+    private checkService: user["checkuser"];
 
     @Inject
-    private deleteService: deletetoken;
+    private deleteService: user["deletetoken"];
 
     @Inject
-    private renewService: renewAccess;
+    private renewService: user["renewToken"];
 
     @POST
     public async login(userinfo:login): Promise<object> {
-        const result:object = await this.checkService.checkuser(userinfo);
+        const result:object = await this.checkService(userinfo);
         return result;
     }
 
@@ -35,13 +35,13 @@ export default class UserController {
     @DELETE
     public async logout(@PathParam("userid") userid: number, @HeaderParam("Authorization") Authorization:string): Promise<string> {
         await this.tokenService.checkAccessToken(Authorization);
-        return this.deleteService.deletetoken(userid);
+        return this.deleteService(userid);
     }
 
 
     @Path(":userid")
     @GET
     public async renewToken(@PathParam("userid") userid: number): Promise<object> {
-        return this.renewService.renewToken(userid);
+        return this.renewService(userid);
     }
 }

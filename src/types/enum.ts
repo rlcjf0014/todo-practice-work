@@ -1,6 +1,5 @@
-const enum TodoStatus {
+/* eslint-disable import/prefer-default-export */
+export const enum TodoStatus {
     Completed = "C",
     Active = "Y",
 }
-
-export default TodoStatus;

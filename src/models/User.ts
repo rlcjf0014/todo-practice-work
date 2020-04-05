@@ -1,5 +1,5 @@
 import {
-    Model, Column, Table, HasMany, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement,
+    Model, Column, Table, HasMany, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement, DataType,
 } from "sequelize-typescript";
 import { Todo } from "./Todo";
 
@@ -18,32 +18,32 @@ export interface UserModel {
 export class User extends Model<User> {
     @PrimaryKey
     @AutoIncrement
-    @Column
+    @Column(DataType.INTEGER)
     userid: number;
 
-    @Column({ allowNull: false })
+    @Column({ allowNull: false, type: DataType.STRING })
     email: string;
 
-    @Column({ allowNull: false })
+    @Column({ allowNull: false, type: DataType.STRING })
     password: string;
 
-    @Column({ allowNull: false })
+    @Column({ allowNull: false, type: DataType.STRING })
     nickname: string;
 
-    @Column
+    @Column(DataType.STRING)
     salt?: string;
 
-    @Column
+    @Column(DataType.STRING)
     refreshToken?: string;
 
     @HasMany(() => Todo)
     todos: Todo[];
 
     @CreatedAt
-    @Column
+    @Column(DataType.DATE)
     creationDate: Date;
 
     @UpdatedAt
-    @Column
+    @Column(DataType.DATE)
     updatedOn: Date;
 }
