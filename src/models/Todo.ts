@@ -2,6 +2,7 @@ import {
     Model, Column, Table, CreatedAt, UpdatedAt, PrimaryKey, AutoIncrement, ForeignKey, DataType,
 } from "sequelize-typescript";
 import { User } from "./User";
+import { TodoStatus } from "../types/enum";
 
 
 export interface TodoModel {
@@ -14,10 +15,6 @@ export interface TodoModel {
     updatedOn: Date
 }
 
-enum TodoStatus {
-    Completed = "C",
-    Active = "Y",
-}
 
 @Table
 export class Todo extends Model<Todo> {

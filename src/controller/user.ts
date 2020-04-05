@@ -14,17 +14,12 @@ require("dotenv").config();
 @Tags("User")
 export default class UserController {
     @Inject
-    private checkService: user["checkuser"];
+    private userService: user;
 
-    @Inject
-    private deleteService: user["deletetoken"];
-
-    @Inject
-    private renewService: user["renewToken"];
 
     @POST
     public async login(userinfo:login): Promise<object> {
-        const result:object = await this.checkService(userinfo);
+        const result:object = await this.userService.checkuser(userinfo);
         return result;
     }
 
@@ -35,13 +30,13 @@ export default class UserController {
     @DELETE
     public async logout(@PathParam("userid") userid: number, @HeaderParam("Authorization") Authorization:string): Promise<string> {
         await this.tokenService.checkAccessToken(Authorization);
-        return this.deleteService(userid);
+        return this.userService.deletetoken(userid);
     }
 
 
     @Path(":userid")
     @GET
     public async renewToken(@PathParam("userid") userid: number): Promise<object> {
-        return this.renewService(userid);
+        return this.userService.renewToken(userid);
     }
 }
